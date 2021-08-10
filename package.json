@@ -1,14 +1,23 @@
 {
   "name": "obs-vulcanologia-back",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "dev": "ts-node-dev --respawn --pretty --transpile-only src/app.ts",
+    "build": "tsc --project ./"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/helmet": "^4.0.0",
+    "@types/node": "^16.4.13",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.3.5"
   },
   "dependencies": {
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "express": "~4.16.1",
-    "morgan": "~1.9.1"
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "helmet": "^4.6.0"
   }
 }
