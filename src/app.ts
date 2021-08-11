@@ -2,7 +2,6 @@ import * as dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import medicion from "./routes/Medicion"
 
 dotenv.config();
 
@@ -10,19 +9,23 @@ dotenv.config();
  * ENV Variables
 */
 
+// default values
+if (!process.env.PORT) { process.env.PORT = "8080"; }
+if (!process.env.DB_PORT) { process.env.DB_PORT = "5432"; }
+
 let envVariables = 0;
 // if (!process.env.variable){ envVariables++; console.log('variable missing in .env'); }
-
-if(envVariables > 0) process.exit(1);
-
-// default PORT
-if (!process.env.PORT) { process.env.PORT = "8080"; }
+if (!process.env.DB_USER){ envVariables++; console.log('DB_USER missing in .env'); }
+if (!process.env.HOST){ envVariables++; console.log('HOST missing in .env'); }
+if (!process.env.DB){ envVariables++; console.log('DB missing in .env'); }
+if (!process.env.DB_PASS){ envVariables++; console.log('DB_PASS missing in .env'); }
+if (envVariables > 0) process.exit(1);
 
 /**
  * Required Internal Modules
 */
 
-// import { rutaRouter } from "./routes/ruta";
+import medicion from "./routes/Medicion"
 
 /**
  * App Variables
@@ -39,13 +42,14 @@ const app = express();
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
-app.use('/med', medicion);
+
+app.use('/med', medicion); // site/med/
 
 app.get('/', (req, res) => {
     res
       .status(200)
       .json({message: "API is listening"});
-})
+});
 
 /**
  * Server Activation
