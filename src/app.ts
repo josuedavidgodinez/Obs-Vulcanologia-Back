@@ -2,6 +2,8 @@ import * as dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import medicion from "./routes/Medicion"
+
 dotenv.config();
 
 /**
@@ -29,6 +31,7 @@ if (!process.env.PORT) { process.env.PORT = "8080"; }
 const PORT = parseInt(process.env.PORT as string, 10);
 const app = express();
 
+
 /**
  *  App Configuration
 */
@@ -36,7 +39,7 @@ const app = express();
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
-// app.use('/ruta', rutaRouter);
+app.use('/med', medicion);
 
 app.get('/', (req, res) => {
     res
