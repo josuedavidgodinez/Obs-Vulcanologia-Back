@@ -42,4 +42,32 @@ med.get('/', function(req,  res) {
     });
 });
 
+med.get('/LecturaInicio', function(req,  res) {
+    const url_query: any = req.query;
+    const fecha_actual = new Date();
+    const mes = fecha_actual.getMonth() + 1
+    const dia = fecha_actual.getDate();
+    const dia_anterior = fecha_actual.getDate()-1;
+    const fecha_compuesta_inicial = fecha_actual.getFullYear() + '-' + mes + '-' + dia_anterior + ' '+ fecha_actual.getHours() + ':' + fecha_actual.getMinutes() + ':' + fecha_actual.getSeconds();
+    const fecha_compuesta_final = fecha_actual.getFullYear() + '-' + mes + '-' + dia + ' '+ fecha_actual.getHours() + ':' + fecha_actual.getMinutes() + ':' + fecha_actual.getSeconds();
+
+
+    const query = "select * from metrics where tiempo between '" + fecha_compuesta_inicial + "' and '" +fecha_compuesta_final+"'" 
+    pool.query(query, (err,data) => {
+        if (err) {
+            res.status(statusCode.conflict)
+            .json({
+                message : err,
+                status: statusCode.conflict
+            })
+            return;
+        }
+        res.status(statusCode.ok)
+        .json({
+            data: data.rows,
+            status: statusCode.ok
+        });
+    });
+});
+
 export default med;
