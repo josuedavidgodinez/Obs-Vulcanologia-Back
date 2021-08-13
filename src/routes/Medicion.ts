@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import pool from '../database/db';
 import { statusCode } from "../models/statusCode";
+import * as sensorService from "../services/SensorService";
 const med: Router =  Router();
 
 // host/med?fecha_i=_fechaInicio&fecha_f=_fechaFin
@@ -24,20 +25,18 @@ med.get('/', function(req,  res) {
         });
         return;
     }
-    const query = "select * from metrics where tiempo between '" + fecha_i + "' and '" +fecha_f+"'" 
-    pool.query(query, (err,data) => {
-        if (err) {
-            res.status(statusCode.conflict)
-            .json({
-                message : err,
-                status: statusCode.conflict
-            })
-            return;
-        }
+    sensorService.getSensors().then(data => {
         res.status(statusCode.ok)
         .json({
-            data: data.rows,
-            status: statusCode.ok
+            status: statusCode.ok,
+            data
+        });
+    }).catch((err: Error) => {
+        res.status(statusCode.conflict)
+        .json({
+            status: statusCode.conflict,
+            name: err.name,
+            message: err.message
         });
     });
 });
