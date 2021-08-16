@@ -4,15 +4,34 @@ import { statusCode } from "../models/statusCode";
 import * as sensorService from "../services/SensorService";
 const med: Router =  Router();
 
-// host/med?fecha_i=_fechaInicio&fecha_f=_fechaFin
+function validateDateFormat(datetime:string): string | null{
+    if (!datetime) return null;
+    if (datetime.length != 12) return null;
+    if (!datetime.match(/^(\d{12})/)) return null;
+    let newDTS = datetime.substr(0,4);
+    newDTS += "-" + datetime.substr(4,2);
+    newDTS += "-" + datetime.substr(6,2);
+    newDTS += " " + datetime.substr(8,2);
+    newDTS += ":" + datetime.substr(10);
+    try{
+        let d = new Date(newDTS);
+        return newDTS;
+    }catch{
+        return null;
+    }
+}
+
+// host/med?fhi=_fechaHoraInicio&fhf=_fechaHoraFin&localTime=_TrueOrFalse
 med.get('/', function(req,  res) {
     const url_query: any = req.query;
-    const fecha_i = url_query.fecha_i;
-    const fecha_f = url_query.fecha_f;
+    // fechaHora = yyyyMMddHHmm
+    const inLocalTime = url_query.localTime?true:false;
+    const fecha_i = validateDateFormat(url_query.fhi);
+    const fecha_f = validateDateFormat(url_query.fhf);
     if (!fecha_i) {
         res.status(statusCode.badRequest)
         .json({
-            message : "Error no se proporciono fecha_i",
+            message : "Fecha de Inicio Invalida",
             status: statusCode.badRequest
         });
         return;
@@ -20,12 +39,12 @@ med.get('/', function(req,  res) {
     if (!fecha_f) {
         res.status(statusCode.badRequest)
         .json({
-            message : "Error no se proporciono fecha_f",
+            message : "Fecha de Final Invalida",
             status: statusCode.badRequest
         });
         return;
     }
-    sensorService.getSensors().then(data => {
+    sensorService.getSensors(fecha_i, fecha_f).then(data => {
         res.status(statusCode.ok)
         .json({
             status: statusCode.ok,

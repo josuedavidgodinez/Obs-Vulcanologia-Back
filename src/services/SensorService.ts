@@ -10,33 +10,44 @@ interface medicion{
 }
 
 interface graphicDataFormat{
-    x: any[],
-    y: any[]
+    fechas: Date[],
+    sensores: {
+        nombre: string,
+        mediciones: any[]
+    }[]
 }
 
-export const getSensors = async (): Promise<graphicDataFormat> => {
+export const getSensors = async (fechaInicio: string, fechaFin: string, localTime: boolean): Promise<graphicDataFormat> => {
+    let tz = localTime?'-06':'+00';
+    fechaInicio = "'" + fechaInicio + tz + "'";
+    fechaFin = "'" + fechaFin + tz + "'";
     let query = 'SELECT '
-    query+= listaAtributos.fecha + ', '
-    query+= listaAtributos.infrasonido1 + ', '
-    query+= listaAtributos.infrasonido2 + ', '
-    query+= listaAtributos.infrasonido3 + ', '
-    query+= listaAtributos.infrasonido4
-    query+= ' FROM mediciones'
+    query += listaAtributos.fecha + ', ';
+    query += listaAtributos.infrasonido1 + ', ';
+    query += listaAtributos.infrasonido2 + ', ';
+    query += listaAtributos.infrasonido3 + ', ';
+    query += listaAtributos.infrasonido4;
+    query += ' FROM mediciones';
+    query += ' WHERE ' + listaAtributos.fecha + ' >= ' + fechaInicio;
+    query += ' AND ' + listaAtributos.fecha + ' <= ' + fechaFin;
 
     const query_result = await pool.query(query);
     const rows: medicion[] = query_result.rows;
     const result: graphicDataFormat = {
-        x: [],
-        y: []
+        fechas: [],
+        sensores: [
+            { nombre: listaAtributos.infrasonido1, mediciones: [] },
+            { nombre: listaAtributos.infrasonido2, mediciones: [] },
+            { nombre: listaAtributos.infrasonido3, mediciones: [] },
+            { nombre: listaAtributos.infrasonido4, mediciones: [] },
+        ]
     };
     rows.forEach(element => {
-        result.x.push(element.fecha);
-        const obj: {[k: string]: any} = {};
-        obj[listaAtributos.infrasonido1] = element.infrasonido1
-        obj[listaAtributos.infrasonido2] = element.infrasonido2
-        obj[listaAtributos.infrasonido3] = element.infrasonido3
-        obj[listaAtributos.infrasonido4] = element.infrasonido4
-        result.y.push(obj)
+        result.fechas.push(element.fecha);
+        result.sensores[0].mediciones.push(element.infrasonido1);
+        result.sensores[1].mediciones.push(element.infrasonido2);
+        result.sensores[2].mediciones.push(element.infrasonido3);
+        result.sensores[3].mediciones.push(element.infrasonido4);
     });
     return result;
 }
