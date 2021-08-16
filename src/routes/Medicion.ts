@@ -25,7 +25,7 @@ function validateDateFormat(datetime:string): string | null{
 med.get('/', function(req,  res) {
     const url_query: any = req.query;
     // fechaHora = yyyyMMddHHmm
-    const inLocalTime = url_query.localTime?true:false;
+    const inLocalTime = url_query.localTime == 'true';
     const fecha_i = validateDateFormat(url_query.fhi);
     const fecha_f = validateDateFormat(url_query.fhf);
     if (!fecha_i) {
@@ -44,7 +44,7 @@ med.get('/', function(req,  res) {
         });
         return;
     }
-    sensorService.getSensors(fecha_i, fecha_f).then(data => {
+    sensorService.getSensors(fecha_i, fecha_f, inLocalTime).then(data => {
         res.status(statusCode.ok)
         .json({
             status: statusCode.ok,
