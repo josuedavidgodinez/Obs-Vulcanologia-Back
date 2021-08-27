@@ -25,6 +25,7 @@ if (envVariables > 0) process.exit(1);
  * Required Internal Modules
 */
 
+import { statusCode } from "./models/statusCode";
 import medicion from "./routes/Medicion"
 
 /**
@@ -46,8 +47,7 @@ app.use(express.json());
 app.use('/med', medicion); // site/med/
 
 app.get('/', (req, res) => {
-    res
-      .status(200)
+    res.status(statusCode.ok)
       .json({message: "API is listening"});
 });
 
