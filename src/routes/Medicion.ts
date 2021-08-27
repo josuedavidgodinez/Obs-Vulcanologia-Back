@@ -1,8 +1,7 @@
 import { Router } from 'express';
-import pool from '../database/db';
+import { listaTablas } from "../database/listaTablas";
 import { statusCode } from "../models/statusCode";
 import * as sensorService from "../services/SensorService";
-import * as SensorRealTime from '../services/SensorRealTimeService';
 const med: Router =  Router();
 
 function validateDateFormat(datetime:string): string | null{
@@ -22,11 +21,39 @@ function validateDateFormat(datetime:string): string | null{
     }
 }
 
-// host/med?fhi=_fechaHoraInicio&fhf=_fechaHoraFin&localTime=_TrueOrFalse
-med.get('/', function(req,  res) {
+function date2QDate(d: Date): string {
+    const s = d.toLocaleString("es-GT",{
+        timeZone: 'America/Guatemala',
+        month: '2-digit',
+        day: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
+    const a = s.split(' ');
+    const f = a[0].split('/');
+    return f[2] + '-' + f[1] + '-' + f[0] + ' ' + a[1] + '.' + d.getUTCMilliseconds();
+}
+function addHours(date: Date, hours: number): Date{
+    const milisInHour = 3600000;
+    const newMilis = hours * milisInHour;
+    return new Date(date.valueOf() + Math.floor(newMilis));
+}
+
+// host/med/tabla?fhi=_fechaHoraInicio&fhf=_fechaHoraFin
+med.get('/:tabla', function(req,  res) {
+    const tabla: string = listaTablas[req.params.tabla];
+    if(!tabla) {
+        res.status(statusCode.badRequest)
+        .json({
+            message : "Tabla Invalida",
+            status: statusCode.badRequest
+        });
+        return;
+    }
     const url_query: any = req.query;
     // fechaHora = yyyyMMddHHmm
-    const inLocalTime = url_query.localTime == 'true';
     const fecha_i = validateDateFormat(url_query.fhi);
     const fecha_f = validateDateFormat(url_query.fhf);
     if (!fecha_i) {
@@ -45,7 +72,7 @@ med.get('/', function(req,  res) {
         });
         return;
     }
-    sensorService.getSensors(fecha_i, fecha_f, inLocalTime).then(data => {
+    sensorService.getSensors(tabla, fecha_i, fecha_f).then(data => {
         res.status(statusCode.ok)
         .json({
             status: statusCode.ok,
@@ -61,18 +88,22 @@ med.get('/', function(req,  res) {
     });
 });
 
-med.get('/LecturaInicio', function(req,  res) {
-    const url_query: any = req.query;
+med.get('/:tabla/LecturaInicio', function(req,  res) {
+    const tabla: string = listaTablas[req.params.tabla];
+    if(!tabla) {
+        res.status(statusCode.badRequest)
+        .json({
+            message : "Tabla Invalida",
+            status: statusCode.badRequest
+        });
+        return;
+    }
     const fecha_actual = new Date();
-    const mes = fecha_actual.getMonth() + 1
-    const dia = fecha_actual.getDate();
-    const dia_anterior = fecha_actual.getDate()-1;
-    const fecha_compuesta_inicial = fecha_actual.getFullYear() + '-' + mes + '-' + dia_anterior + ' '+ fecha_actual.getHours() + ':' + fecha_actual.getMinutes() + ':' + fecha_actual.getSeconds() + ':' + fecha_actual.getMilliseconds();
-    const fecha_compuesta_final = fecha_actual.getFullYear() + '-' + mes + '-' + dia + ' '+ fecha_actual.getHours() + ':' + fecha_actual.getMinutes() + ':' + fecha_actual.getSeconds() + ':' + fecha_actual.getMilliseconds();
+    const fecha_ayer = addHours(fecha_actual, -24);
+    const fecha_compuesta_inicial = date2QDate(fecha_actual);
+    const fecha_compuesta_final = date2QDate(fecha_ayer);
 
-
-
-    SensorRealTime.getSensors(fecha_compuesta_inicial, fecha_compuesta_final, true).then(data => {
+    sensorService.getSensors(tabla, fecha_compuesta_inicial, fecha_compuesta_final).then(data => {
         res.status(statusCode.ok)
         .json({
             status: statusCode.ok,

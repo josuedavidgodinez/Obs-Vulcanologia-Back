@@ -1,14 +1,6 @@
 import pool from "../database/db";
 import { listaAtributos } from "../models/listaAtributos";
 
-interface medicion{
-    fecha: Date,
-    infrasonido1: number | null,
-    infrasonido2: number | null,
-    infrasonido3: number | null,
-    infrasonido4: number | null
-}
-
 interface graphicDataFormat{
     fechas: Date[],
     sensores: {
@@ -17,22 +9,20 @@ interface graphicDataFormat{
     }[]
 }
 
-export const getSensors = async (fechaInicio: string, fechaFin: string, localTime: boolean): Promise<graphicDataFormat> => {
-    let tz = localTime?'-06':'+00';
-    fechaInicio = "'" + fechaInicio + tz + "'";
-    fechaFin = "'" + fechaFin + tz + "'";
+export const getSensors = async (tabla: string, fechaInicio: string, fechaFin: string): Promise<graphicDataFormat> => {
+    fechaInicio = "'" + fechaInicio + "'";
+    fechaFin = "'" + fechaFin + "'";
     let query = 'SELECT '
     query += listaAtributos.fecha + ', ';
     query += listaAtributos.infrasonido1 + ', ';
     query += listaAtributos.infrasonido2 + ', ';
     query += listaAtributos.infrasonido3 + ', ';
     query += listaAtributos.infrasonido4;
-    query += ' FROM mediciones';
+    query += ' FROM ' + tabla;
     query += ' WHERE ' + listaAtributos.fecha + ' >= ' + fechaInicio;
     query += ' AND ' + listaAtributos.fecha + ' <= ' + fechaFin;
 
     const query_result = await pool.query(query);
-    const rows: medicion[] = query_result.rows;
     const result: graphicDataFormat = {
         fechas: [],
         sensores: [
@@ -42,12 +32,12 @@ export const getSensors = async (fechaInicio: string, fechaFin: string, localTim
             { nombre: listaAtributos.infrasonido4, mediciones: [] },
         ]
     };
-    rows.forEach(element => {
-        result.fechas.push(element.fecha);
-        result.sensores[0].mediciones.push(element.infrasonido1);
-        result.sensores[1].mediciones.push(element.infrasonido2);
-        result.sensores[2].mediciones.push(element.infrasonido3);
-        result.sensores[3].mediciones.push(element.infrasonido4);
+    query_result.rows.forEach(element => {
+        result.fechas.push(element[listaAtributos.fecha]);
+        result.sensores[0].mediciones.push(element[listaAtributos.infrasonido1]);
+        result.sensores[1].mediciones.push(element[listaAtributos.infrasonido2]);
+        result.sensores[2].mediciones.push(element[listaAtributos.infrasonido3]);
+        result.sensores[3].mediciones.push(element[listaAtributos.infrasonido4]);
     });
     return result;
 }
