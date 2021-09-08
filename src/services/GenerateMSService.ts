@@ -1,56 +1,23 @@
-import pool from "../database/db";
-import { listaAtributos } from "../models/listaAtributos";
+import * as timeService from "./TimeService";
+import * as io from "./FileService";
+import { listaEstaciones } from "../database/listaTablas";
+import { runPy } from "./pythonService";
 
-function generateHeader(name: string, samples:number, initDT: Date): string {
-    const dtstring = initDT.toISOString().replace('Z','');
-    return 'TIMESERIES '+ name +' '+samples + ' samples, 55 sps, ' + dtstring +', SLIST, INTEGER, Counts\r\n';
-}
-function genetateContent(meditions: number[]): string{
-    const shortTab = '      ';
-    const normalTab = '        ';
-    const breakLine = '\r\n';
-    let content = '';
-    for (let index = 0; index < meditions.length; index++) {
-        const element = meditions[index];
-        if (index % 6 == 0){
-            content += shortTab + element
-        }
-        else{
-            content += normalTab + element;
-            if(index % 6 == 5){
-                content += breakLine;
-            }
-        }
-    }
-    return content;
-}
+export const genMiniseeds = async (tabla: string, fechaInicio: Date, fechaFin: Date): Promise<string[]> => {
+    const obspydata = await io.getObsPyDataFolder();
+    const ascii2miniseed = io.a2msFolder;
 
-export const getASCIIstrings = async (tabla: string, fechaInicio: string, fechaFin: string): Promise<string[]> => {
-    fechaInicio = "'" + fechaInicio + "'";
-    fechaFin = "'" + fechaFin + "'";
-    let query = 'SELECT '
-    query += listaAtributos.fecha + ', ';
-    query += listaAtributos.infrasonido1 + ', ';
-    query += listaAtributos.infrasonido2 + ', ';
-    query += listaAtributos.infrasonido3 + ', ';
-    query += listaAtributos.infrasonido4;
-    query += ' FROM ' + tabla;
-    query += ' WHERE ' + listaAtributos.fecha + ' >= ' + fechaInicio;
-    query += ' AND ' + listaAtributos.fecha + ' <= ' + fechaFin;
+    const sd = timeService.date2QDate(fechaInicio);
+    const ed = timeService.date2QDate(fechaFin);
+    const table = listaEstaciones[tabla].toString();
 
-    const query_result = await pool.query(query);
-    const headData = [
-        query_result.rows.length,
-        query_result.rows[0][listaAtributos.fechaguardado]
-    ];
-    const infrasonido1 = generateHeader('GI_ISE2I_01_BDF_D',headData[0], headData[1])
-        + genetateContent(query_result.rows.map(row => row[listaAtributos.infrasonido1]));
-    const infrasonido2 = generateHeader('GI_ISE2I_02_BDF_D',headData[0], headData[1])
-        + genetateContent(query_result.rows.map(row => row[listaAtributos.infrasonido2]));
-    const infrasonido3 = generateHeader('GI_ISE2I_03_BDF_D',headData[0], headData[1])
-        + genetateContent(query_result.rows.map(row => row[listaAtributos.infrasonido3]));
-    const infrasonido4 = generateHeader('GI_ISE2I_04_BDF_D',headData[0], headData[1])
-        + genetateContent(query_result.rows.map(row => row[listaAtributos.infrasonido4]));
+    const miniseeds = await runPy(
+        'generateMiniSeed',
+        [sd, ed, table, obspydata, ascii2miniseed]
+    );
 
-    return [ infrasonido1, infrasonido2, infrasonido3, infrasonido4];
+    //Cambiar a Base de datos cuando sea posible
+    await io.addReg(miniseeds);
+
+    return miniseeds.map(a => String(a));
 }
