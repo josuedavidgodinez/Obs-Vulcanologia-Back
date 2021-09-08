@@ -19,6 +19,10 @@ if (!process.env.DB_USER){ envVariables++; console.log('DB_USER missing in .env'
 if (!process.env.HOST){ envVariables++; console.log('HOST missing in .env'); }
 if (!process.env.DB){ envVariables++; console.log('DB missing in .env'); }
 if (!process.env.DB_PASS){ envVariables++; console.log('DB_PASS missing in .env'); }
+if (!process.env.PYSCRIPTS){ envVariables++; console.log('PYSCRIPTS missing in .env'); }
+if (!process.env.ATOMS){ envVariables++; console.log('ATOMS missing in .env'); }
+if (!process.env.OBSPYDATA){ envVariables++; console.log('OBSPYDATA missing in .env'); }
+if (!process.env.IMGFOLDER){ envVariables++; console.log('IMGFOLDER missing in .env'); }
 if (envVariables > 0) process.exit(1);
 
 /**
@@ -27,6 +31,7 @@ if (envVariables > 0) process.exit(1);
 
 import { statusCode } from "./models/statusCode";
 import medicion from "./routes/Medicion"
+import dayplot from "./routes/DayPlot";
 
 /**
  * App Variables
@@ -45,6 +50,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/med', medicion); // site/med/
+app.use('/dayplot', dayplot );// site/dateplot
 
 app.get('/', (req, res) => {
     res.status(statusCode.ok)
