@@ -49,3 +49,18 @@ export function addHours(date: Date, hours: number): Date{
     const newMilis = hours * milisInHour;
     return new Date(date.valueOf() + Math.floor(newMilis));
 }
+export function addMiliseconds(date: Date, miliseconds: number): Date{
+    return new Date(date.valueOf() + Math.floor(miliseconds));
+}
+export function changeToUTC(date: Date): Date{
+    const d = Date.UTC(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+        date.getHours(),
+        date.getMinutes(),
+        date.getSeconds(),
+        date.getMilliseconds()
+    );
+    return new Date(d);
+}
