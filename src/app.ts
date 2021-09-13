@@ -32,6 +32,7 @@ if (envVariables > 0) process.exit(1);
 import { statusCode } from "./models/statusCode";
 import medicion from "./routes/Medicion"
 import dayplot from "./routes/DayPlot";
+import media from "./routes/media";
 
 /**
  * App Variables
@@ -51,6 +52,7 @@ app.use(express.json());
 
 app.use('/med', medicion); // site/med/
 app.use('/dayplot', dayplot );// site/dateplot
+app.use('/media', media); // site/media
 
 app.get('/', (req, res) => {
     res.status(statusCode.ok)

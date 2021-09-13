@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import * as path from "path";
 
 const dirchar = process.env.DIRCHAR? process.env.DIRCHAR : '/';
 
@@ -78,4 +79,7 @@ export const getReg = async (): Promise<string[]> => {
     const file = await miniseedRegs();
     const content = await readFile(file);
     return content.split('\n');
+}
+export const getImgPrueba = () => {
+    return path.resolve('./src/public/imagen_prueba.png')
 }
