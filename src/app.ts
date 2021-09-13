@@ -19,7 +19,6 @@ if (!process.env.DB_USER){ envVariables++; console.log('DB_USER missing in .env'
 if (!process.env.HOST){ envVariables++; console.log('HOST missing in .env'); }
 if (!process.env.DB){ envVariables++; console.log('DB missing in .env'); }
 if (!process.env.DB_PASS){ envVariables++; console.log('DB_PASS missing in .env'); }
-if (!process.env.PYSCRIPTS){ envVariables++; console.log('PYSCRIPTS missing in .env'); }
 if (!process.env.ATOMS){ envVariables++; console.log('ATOMS missing in .env'); }
 if (!process.env.OBSPYDATA){ envVariables++; console.log('OBSPYDATA missing in .env'); }
 if (!process.env.IMGFOLDER){ envVariables++; console.log('IMGFOLDER missing in .env'); }

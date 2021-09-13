@@ -43,8 +43,7 @@ export const readFile = async (path:string): Promise<string> => {
     return content;
 }
 export const getPyScript = (scriptname:string) => {
-    const scriptsFolder = process.env.PYSCRIPTS? process.env.PYSCRIPTS : '.' + dirchar;
-    return scriptsFolder + scriptname +'.py';
+    return path.resolve('./src/pyscripts/' + scriptname + '.py');
 }
 export const getObsPyDataFolder = async (): Promise<string> => {
     const folder = process.env.OBSPYDATA? process.env.OBSPYDATA : '.' + dirchar +'obspydata';
