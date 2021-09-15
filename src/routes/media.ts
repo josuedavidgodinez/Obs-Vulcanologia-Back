@@ -14,7 +14,7 @@ const badRequestObject = (message: string) => {
     };
 }
 
-// host/media/estacion/sensor/:tipo?fhi=_fechaHoraInicio&fhf=_fechaHoraFin
+// host/media/estacion/sensor/tipo?fhi=_fechaHoraInicio&fhf=_fechaHoraFin
 media.get('/:estacion/:sensor/:tipo', (req,  res) => {    
     const estacion: string = listaTablas[req.params.estacion];
     const sensor: number = +req.params.sensor;
