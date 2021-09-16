@@ -32,11 +32,13 @@ import { statusCode } from "./models/statusCode";
 import medicion from "./routes/Medicion"
 import dayplot from "./routes/DayPlot";
 import media from "./routes/media";
+import * as AutoTasks from "./services/GenerateAuto";
+
 
 /**
  * App Variables
 */
-
+const cron = require('node-cron');
 const PORT = parseInt(process.env.PORT as string, 10);
 const app = express();
 
@@ -53,10 +55,27 @@ app.use('/med', medicion); // site/med/
 app.use('/dayplot', dayplot );// site/dateplot
 app.use('/media', media); // site/media
 
+
 app.get('/', (req, res) => {
     res.status(statusCode.ok)
       .json({message: "API is listening"});
 });
+
+
+/**
+ * Tareas automáticas
+ * 1er * = minutos
+ * 2do * = horas
+ * 3er * = dia del mes
+ * 4to * = mes
+ * 5to * = dia de la semana
+ */
+
+cron.schedule('*/1 * * * *', async function () { 
+    console.log(AutoTasks.Test())
+});
+
+
 
 /**
  * Server Activation
