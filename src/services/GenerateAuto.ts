@@ -4,15 +4,15 @@ export function Test(): string {
     return "Test"
 }
 
-export async function GenerateMSedd() {
-    const response = await fetch('http://localhost:8080/genMiniseed');
+export async function GenerateMSedd(port: string) {
+    const response = await fetch(`http://localhost:${port}/genMiniseed`);
     const body = await response.json();
 
     console.log('inside cron function ', body);
 }
 
-export async function GetImage() {
-    const response = await fetch('http://localhost:8080/getImg');
+export async function GetImage(port: string) {
+    const response = await fetch(`http://localhost:${port}/getImg`);
     const body = await response.json();
 
     console.log('inside cron function ', body);

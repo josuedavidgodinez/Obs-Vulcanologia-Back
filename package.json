@@ -23,7 +23,6 @@
     "express": "^4.17.1",
     "helmet": "^4.6.0",
     "node-cron": "^3.0.0",
-    "node-fetch": "*",
     "pg": "^8.7.1",
     "python-shell": "^3.0.0"
   }

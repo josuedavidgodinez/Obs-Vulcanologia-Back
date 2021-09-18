@@ -76,11 +76,11 @@ cron.schedule('*/1 * * * *', async function () {
 });
 
 cron.schedule("0 23 * * *", async function() {
-    AutoTasks.GenerateMSedd()
+    AutoTasks.GenerateMSedd(PORT.toString())
 });
 
 cron.schedule("40 23 * * *", async function() {
-    AutoTasks.GetImage()
+    AutoTasks.GetImage(PORT.toString())
 });
 
 
