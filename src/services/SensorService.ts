@@ -9,6 +9,15 @@ interface graphicDataFormat{
     }[]
 }
 
+const getUniqueDates = (dates: Date[]): Date[] => {
+    const ud: Date[] = [];
+    dates.forEach(d => {
+        const check = ud.filter(u => u.getTime() == d.getTime());
+        if(check.length == 0) ud.push(d);
+    });
+    return ud;
+}
+
 export const getSensors = async (tabla: string, fechaInicio: string, fechaFin: string): Promise<graphicDataFormat> => {
     fechaInicio = "'" + fechaInicio + "'";
     fechaFin = "'" + fechaFin + "'";
@@ -32,12 +41,33 @@ export const getSensors = async (tabla: string, fechaInicio: string, fechaFin: s
             { nombre: columnasSensores.infrasonido4, mediciones: [] },
         ]
     };
-    query_result.rows.forEach(element => {
-        result.fechas.push(element[columnasSensores.fecha]);
-        result.sensores[0].mediciones.push(element[columnasSensores.infrasonido1]);
-        result.sensores[1].mediciones.push(element[columnasSensores.infrasonido2]);
-        result.sensores[2].mediciones.push(element[columnasSensores.infrasonido3]);
-        result.sensores[3].mediciones.push(element[columnasSensores.infrasonido4]);
+    const myRows: {fecha: Date, sensores: number[]}[] = query_result.rows.map(r => {
+        return {
+            fecha: r[columnasSensores.fecha],
+            sensores: [
+                r[columnasSensores.infrasonido1],
+                r[columnasSensores.infrasonido2],
+                r[columnasSensores.infrasonido3],
+                r[columnasSensores.infrasonido4],
+            ]
+        };
+    });
+    const uniqueDates = getUniqueDates(myRows.map(r => r.fecha));
+    const promedios: {fecha: Date, sensores: number[]}[] = uniqueDates.map(fecha => {
+        const sensores: number[] = [];
+        const dateRows = myRows.filter(r => r.fecha.getTime() == fecha.getTime());
+        for (let index = 0; index < 4; index++) {
+            const arr: number[] = dateRows.map(r => r.sensores[index]);
+            const avg: number = Math.round(arr.reduce((a,b) => a + b, 0) / arr.length);
+            sensores.push(avg);
+        }
+        return { fecha, sensores };
+    });
+    promedios.forEach(element => {
+        result.fechas.push(element.fecha);
+        for (let index = 0; index < 4; index++) {
+            result.sensores[index].mediciones.push(element.sensores[index]);
+        }
     });
     return result;
 }
