@@ -1,5 +1,4 @@
 ///Funciones a ejecutar de forma automatica
-import fetch from 'node-fetch'
 
 export function Test(): string {
     return "Test"
