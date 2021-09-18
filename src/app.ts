@@ -76,7 +76,7 @@ cron.schedule('*/1 * * * *', async function () {
 });
 
 cron.schedule("0 23 * * *", async function() {
-    AutoTasks.GenerateMSedd(PORT.toString())
+    AutoTasks.GenerateMSeed(PORT.toString())
 });
 
 cron.schedule("40 23 * * *", async function() {
