@@ -75,6 +75,13 @@ cron.schedule('*/1 * * * *', async function () {
     console.log(AutoTasks.Test())
 });
 
+cron.schedule("0 23 * * *", async function() {
+    AutoTasks.GenerateMSedd()
+});
+
+cron.schedule("40 23 * * *", async function() {
+    AutoTasks.GetImage()
+});
 
 
 /**
