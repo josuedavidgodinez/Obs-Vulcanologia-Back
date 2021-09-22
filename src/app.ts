@@ -32,6 +32,7 @@ import { statusCode } from "./models/statusCode";
 import medicion from "./routes/Medicion"
 import dayplot from "./routes/DayPlot";
 import media from "./routes/media";
+import see from "./routes/Seeds"
 import * as AutoTasks from "./services/GenerateAuto";
 
 
@@ -54,7 +55,7 @@ app.use(express.json());
 app.use('/med', medicion); // site/med/
 app.use('/dayplot', dayplot );// site/dateplot
 app.use('/media', media); // site/media
-
+app.use('/see',see); //pruebas de servicios de seeds e imagenes
 
 app.get('/', (req, res) => {
     res.status(statusCode.ok)

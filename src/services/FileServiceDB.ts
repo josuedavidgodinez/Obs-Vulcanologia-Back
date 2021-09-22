@@ -14,18 +14,16 @@ export const ReadMiniSeeds = async ( fechaInicio: string, fechaFin: string): Pro
     query += ' FROM archivos_seed' 
     query += ' WHERE ' + columnasminiSeeds.fechaInicial + ' >= ' + fechaInicio;
     query += ' AND ' + columnasminiSeeds.fechaFinal + ' <= ' + fechaFin;
-
     const query_result = await pool.query(query);
     let result: miniseedDataFormat = {
-      seeds: []
+        seeds: []
     };
-  const seeds =  query_result.rows.map(
-       (r) => {
-           return r[columnasminiSeeds.path]
-       }
+    const seeds =  query_result.rows.map(
+        (r) => {
+            return r[columnasminiSeeds.path]
+        }
     );
-    result = {seeds : seeds}
-    
+    result = {seeds : seeds}    
     return result;
 }
 
