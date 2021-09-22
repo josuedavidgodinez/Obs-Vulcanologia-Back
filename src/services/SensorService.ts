@@ -9,14 +9,6 @@ interface graphicDataFormat{
     }[]
 }
 
-const getUniqueDates = (dates: Date[]): Date[] => {
-    const ud: Date[] = [];
-    dates.forEach(d => {
-        const check = ud.filter(u => u.getTime() == d.getTime());
-        if(check.length == 0) ud.push(d);
-    });
-    return ud;
-}
 export const getSensors = async (tabla: string, fechaInicio: string, fechaFin: string): Promise<graphicDataFormat> => {
     fechaInicio = "'" + fechaInicio + "'";
     fechaFin = "'" + fechaFin + "'";
@@ -29,6 +21,7 @@ export const getSensors = async (tabla: string, fechaInicio: string, fechaFin: s
     query += ' FROM ' + tabla;
     query += ' WHERE ' + columnasSensores.fecha + ' >= ' + fechaInicio;
     query += ' AND ' + columnasSensores.fecha + ' <= ' + fechaFin;
+    query += ' ORDER BY ' + columnasSensores.fecha
 
     const query_result = await pool.query(query);
     const result: graphicDataFormat = {
@@ -40,6 +33,7 @@ export const getSensors = async (tabla: string, fechaInicio: string, fechaFin: s
             { nombre: columnasSensores.infrasonido4, mediciones: [] },
         ]
     };
+    console.log('rows: ' + query_result.rowCount.toString());
     const myRows: {fecha: Date, sensores: number[]}[] = query_result.rows.map(r => {
         return {
             fecha: r[columnasSensores.fecha],
@@ -51,16 +45,27 @@ export const getSensors = async (tabla: string, fechaInicio: string, fechaFin: s
             ]
         };
     });
-    const uniqueDates = getUniqueDates(myRows.map(r => r.fecha));
-    const promedios: {fecha: Date, sensores: number[]}[] = uniqueDates.map(fecha => {
-        const sensores: number[] = [];
-        const dateRows = myRows.filter(r => r.fecha.getTime() == fecha.getTime());
-        for (let index = 0; index < 4; index++) {
-            const arr: number[] = dateRows.map(r => r.sensores[index]);
-            const avg: number = Math.round(arr.reduce((a,b) => a + b, 0) / arr.length);
-            sensores.push(avg);
+    if (myRows.length == 0) return result;
+    let lastDate: Date = myRows[0].fecha;
+    let repeticiones: number = 0;
+    let sumas: number[] = [0,0,0,0];
+    const promedios: {fecha: Date, sensores: number[]}[] = []
+    myRows.forEach(row => {
+        if(row.fecha.getTime() != lastDate.getTime()){
+            const fecha = new Date(lastDate.getTime());
+            const sensores = [];
+            for (let index = 0; index < 4; index++) {
+                sensores.push(Math.round(sumas[index] / repeticiones));
+            }
+            promedios.push({fecha, sensores});
+            repeticiones = 0;
+            sumas = [0,0,0,0];
         }
-        return { fecha, sensores };
+        for (let index = 0; index < 4; index++) {
+            sumas[index] += row.sensores[index];
+        }
+        repeticiones++;
+        lastDate = row.fecha;
     });
     promedios.forEach(element => {
         result.fechas.push(element.fecha);
