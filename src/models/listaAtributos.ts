@@ -13,10 +13,11 @@ export const columnasImagenes = {
     estacion: 'estacion',
     sensor: 'sensor',
     tipo: 'tipo',
+    alias: 'alias',
     path: 'ruta_completa',
     fechaInicial: 'fecha_inicial',
     fechaFinal: 'fecha_final',
-    fechaRegisto: 'fecha_registro'
+    fechaRegisto: 'fecha_hora_registro'
 }
 export const columnasminiSeeds = {
     path: 'ruta_completa',

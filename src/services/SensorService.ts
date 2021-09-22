@@ -17,7 +17,6 @@ const getUniqueDates = (dates: Date[]): Date[] => {
     });
     return ud;
 }
-
 export const getSensors = async (tabla: string, fechaInicio: string, fechaFin: string): Promise<graphicDataFormat> => {
     fechaInicio = "'" + fechaInicio + "'";
     fechaFin = "'" + fechaFin + "'";
