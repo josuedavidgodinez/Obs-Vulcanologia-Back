@@ -64,8 +64,8 @@ med.get('/:tabla/LecturaInicio', function(req,  res) {
     }
     const fecha_actual = new Date();
     const fecha_ayer = timeService.addHours(fecha_actual, -24);
-    const fecha_compuesta_inicial = timeService.date2QDate(fecha_actual);
-    const fecha_compuesta_final = timeService.date2QDate(fecha_ayer);
+    const fecha_compuesta_inicial = timeService.date2QDate(fecha_ayer);
+    const fecha_compuesta_final = timeService.date2QDate(fecha_actual);
 
     sensorService.getSensors(tabla, fecha_compuesta_inicial, fecha_compuesta_final).then(data => {
         res.status(statusCode.ok)
