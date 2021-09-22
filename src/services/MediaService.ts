@@ -27,6 +27,7 @@ export const getImgPath = async (
         fechaFin = "'" + fechaFin + "'";
         query += ' AND ' + columnasImagenes.fechaFinal + ' <= ' + fechaFin;
     }
+    query += 'ORDER BY ' + columnasImagenes.fechaRegisto;
     const query_result = await pool.query(query);
     if (query_result.rows.length == 0) throw new Error("Image Not Found");
     return query_result.rows[0][columnasImagenes.path];

@@ -15,5 +15,6 @@ export const columnasImagenes = {
     tipo: 'tipo',
     path: 'ruta_completa',
     fechaInicial: 'fecha_inicial',
-    fechaFinal: 'fecha_final'
+    fechaFinal: 'fecha_final',
+    fechaRegisto: 'fecha_registro'
 }

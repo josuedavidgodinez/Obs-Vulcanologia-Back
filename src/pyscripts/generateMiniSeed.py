@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from obspy import UTCDateTime, read, Trace, Stream
 import os
 
-print('\n ' + datetime.now().strftime("%Y-%d-%m %H:%M:%S") + ' - inicia programa\n')
+# print('\n ' + datetime.now().strftime("%Y-%d-%m %H:%M:%S") + ' - inicia programa\n')
 
 # params from system
 inicio = sys.argv[1] 
@@ -21,7 +21,7 @@ tabla = sys.argv[3]
 datafolder = sys.argv[4]
 ascii2miniseedfolder = sys.argv[5]
 
-print(sys.argv)
+# print(sys.argv)
 
 try:
     con = psycopg2.connect(user = "postgres",
@@ -51,7 +51,7 @@ except:
 con.commit()
 con.close()
 print('conn closed')
-print('\n ' + datetime.now().strftime("%Y-%d-%m %H:%M:%S") + ' - termina query\n')
+# print('\n ' + datetime.now().strftime("%Y-%d-%m %H:%M:%S") + ' - termina query\n')
 
 now = datetime.now()
 nowstr = now.strftime("%Y%m%d_%H%M%S")
@@ -103,15 +103,15 @@ for index, r in df.iterrows():
     if count % 10000 == 0:
         print(datetime.now().strftime("%Y-%d-%m %H:%M:%S") + ' - ' + 'rows: ' + str(count))
 
-print(str(df.index))
-print(str(count))
+# print(str(df.index))
+# print(str(count))
 
-print('\n ' + datetime.now().strftime("%Y-%d-%m %H:%M:%S") + ' - inicia escribir miniseed\n')
+# print('\n ' + datetime.now().strftime("%Y-%d-%m %H:%M:%S") + ' - inicia escribir miniseed\n')
 for i in range(4):
-    print(txtfiles[i])
+    # print(txtfiles[i])
     os.system('sudo ' + ascii2miniseedfolder + ' ' + txtfiles[i] + ' -o ' + msfiles[i])
 
 for i in range(4):
     print(txtfiles[i] + '\t' + msfiles[i])
 
-print('\n ' + datetime.now().strftime("%Y-%d-%m %H:%M:%S") + ' - fin de programa\n')
+# print('\n ' + datetime.now().strftime("%Y-%d-%m %H:%M:%S") + ' - fin de programa\n')

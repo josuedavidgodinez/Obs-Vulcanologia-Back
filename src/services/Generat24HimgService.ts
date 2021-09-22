@@ -1,7 +1,6 @@
 import * as timeService from "./TimeService";
 import pool from "../database/db";
 import { listaEstaciones } from "../database/listaTablas";
-import { listaAtributos } from "../models/listaAtributos";
 import * as io from "./FileService";
 import { runPy } from "./pythonService";
 
