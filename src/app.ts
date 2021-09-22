@@ -59,7 +59,10 @@ app.use('/see',see); //pruebas de servicios de seeds e imagenes
 
 app.get('/', (req, res) => {
     res.status(statusCode.ok)
-      .json({message: "API is listening"});
+        .json({
+            message: "API is listening",
+            date: new Date()
+    });
 });
 
 
