@@ -18,3 +18,11 @@ export const columnasImagenes = {
     fechaFinal: 'fecha_final',
     fechaRegisto: 'fecha_registro'
 }
+export const columnasminiSeeds = {
+    path: 'ruta_completa',
+    fechaInicial: 'fecha_inicial',
+    fechaFinal: 'fecha_final',
+    Alias: 'alias',
+    Archivotxt: 'archivo_txt',
+    fechaRegisto: 'fecha_hora_registro'
+}

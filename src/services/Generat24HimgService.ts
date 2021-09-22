@@ -15,6 +15,8 @@ export const generateImage = async(table: string, endDate: Date): Promise<string
 
     // Cambiar a base de datos cuando sea posible
     const miniseeds: string[] = await io.getReg();
+    //fecha inicio sea mayor o igual a la fecha que me estan mandando , fecha inicio menor o igual al end date
+
 
     const parametros = [ imgFolder + imgName ]
     miniseeds.forEach(element => parametros.push(element));
@@ -23,6 +25,8 @@ export const generateImage = async(table: string, endDate: Date): Promise<string
         'create24Himg',
         parametros
     );
+
+    //si img path retorna algo correcto lo inserto
 
     return imgPath[0];
 }
