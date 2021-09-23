@@ -1,7 +1,16 @@
 import * as timeService from "./TimeService";
 import * as io from "./FileService";
-import { listaEstaciones } from "../database/listaTablas";
+import pool from "../database/db";
+import { listaTablas, listaEstaciones } from "../database/listaTablas";
 import { runPy } from "./pythonService";
+
+interface rowObject{
+    ruta_completa: string,
+    fecha_inicial: string,
+    fecha_final: string,
+    alias: string,
+    archivo_txt: string,
+}
 
 export const genMiniseeds = async (tabla: string, fechaInicio: Date, fechaFin: Date): Promise<string[]> => {
     const obspydata = await io.getObsPyDataFolder();
@@ -16,8 +25,30 @@ export const genMiniseeds = async (tabla: string, fechaInicio: Date, fechaFin: D
         [sd, ed, table, obspydata, ascii2miniseed]
     );
 
-    //Cambiar a Base de datos cuando sea posible
-    await io.addReg(miniseeds);
-
-    return miniseeds.map(a => String(a));
+    const commonAlias = timeService.date2number(fechaFin) + '_' + tabla;
+    const regs: rowObject[] = [];
+    for (let index = 0; index < miniseeds.length; index++) {
+        const element: string = miniseeds[index];
+        const paths = ('' + element).split('\t');//[txt,ms]
+        regs.push({
+            ruta_completa: "'" + paths[1] + "'",
+            fecha_inicial: "'" + sd + "'",
+            fecha_final: "'" + ed + "'",
+            archivo_txt: "'" + paths[0] + "'",
+            alias: "'" + commonAlias + '_' + (index + 1) + "'"
+        });
+    }
+    const registerDate = "'" + timeService.date2QDate(new Date()) + "'";
+    let query = 'INSERT INTO ' + listaTablas['seeds'];
+    query += '(ruta_completa, fecha_inicial, fecha_final, alias, archivo_txt, fecha_hora_registro) VALUES ';
+    for (let index = 0; index < regs.length; index++) {
+        const r = regs[index];
+        if(index != 0) query += ',';
+        let row = '(' + r.ruta_completa + ',' + r.fecha_inicial + ',' + r.fecha_final;
+        row += ',' + r.alias + ',' + r.archivo_txt + ',' + registerDate + ')';
+        query += row;
+    }
+    const query_result = await pool.query(query);
+    if(query_result.rowCount != regs.length) throw new Error('RowCount Inconsistency');
+    return regs.map(r => r.ruta_completa);
 }
