@@ -4,14 +4,17 @@ import { columnasminiSeeds } from "../models/listaAtributos";
 
 
 
-export const ReadMiniSeeds = async ( fechaInicio: string, fechaFin: string): Promise<string[]> => {
+export const ReadMiniSeeds = async ( estacion: string,sensor: string,fechaInicio: string, fechaFin: string): Promise<string[]> => {
     fechaInicio = "'" + fechaInicio + "'";
     fechaFin = "'" + fechaFin + "'";
     let query = 'SELECT '
     query += columnasminiSeeds.path 
-    query += ' FROM archivos_seed' 
-    query += ' WHERE ' + columnasminiSeeds.fechaInicial + ' >= ' + fechaInicio;
-    query += ' AND ' + columnasminiSeeds.fechaFinal + ' <= ' + fechaFin;
+    query += ' FROM archivos_seed2' 
+    query += ' WHERE (' + columnasminiSeeds.fechaInicial + ' >= ' + fechaInicio;
+    query += ' AND ' + columnasminiSeeds.fechaFinal + ' <= ' + fechaFin + ')';
+    query += ' AND ' + columnasminiSeeds.estacion + " = '" +estacion+"'";
+    query += ' AND ' + columnasminiSeeds.sensor + " = '" +sensor+"'";
+
     const query_result = await pool.query(query);
     
     const seeds =  query_result.rows.map(
@@ -23,17 +26,16 @@ export const ReadMiniSeeds = async ( fechaInicio: string, fechaFin: string): Pro
     return seeds;
 }
 
-export const InsertImage =  (estacion:string,sensor:string,tipo:string,alias:string,ruta_completa:string, fechaInicio: string, fechaFin: string,fechaHoraRegistro: string)=> {
+export const InsertImage = async (estacion:string,sensor:string,tipo:string,alias:string,ruta_completa:string, fechaInicio: string, fechaFin: string): Promise<string> =>{
     fechaInicio = "'" + fechaInicio + "'";
     fechaFin = "'" + fechaFin + "'";
-    fechaHoraRegistro  = "'" + fechaHoraRegistro + "'";
     let query = 'INSERT INTO public.imagenes_obspy2('
     query += columnasImagenes.estacion + ', ';
     query += columnasImagenes.sensor + ', ';
     query += columnasImagenes.tipo + ', ';
     query += columnasImagenes.alias + ', ';
     query += columnasImagenes.path + ', ';
-    query += columnasImagenes.fechaFinal + ', ';
+    query += columnasImagenes.fechaInicial + ', ';
     query += columnasImagenes.fechaFinal + ', ';
     query += columnasImagenes.fechaRegisto + ')';
     query += ' VALUES (' 
@@ -44,12 +46,12 @@ export const InsertImage =  (estacion:string,sensor:string,tipo:string,alias:str
     query += "'"+ruta_completa+ "',";
     query += fechaInicio+ ",";
     query += fechaFin+ ",";
-    query += fechaHoraRegistro+ ")";
-
+    query += "now() )";    
    
-    
-     pool.query(query);
-    
+   await pool.query(query);
+   return "ok";
+   
+   
     
 }
 

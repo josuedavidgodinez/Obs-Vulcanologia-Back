@@ -4,7 +4,7 @@ import { listaEstaciones } from "../database/listaTablas";
 import * as io from "./FileService";
 import { runPy } from "./pythonService";
 import * as FileS from "./FileServiceDB"
-export const generateImage = async(table: string, endDate: Date): Promise<string> => {
+export const generateImage = async(sensor: string,table: string, endDate: Date): Promise<string> => {
     const startDate = timeService.addHours(endDate, -24);
     const sd = timeService.date2QDate(startDate);
     const ed = timeService.date2QDate(endDate);
@@ -14,7 +14,7 @@ export const generateImage = async(table: string, endDate: Date): Promise<string
         + '_' +timeService.date2number(endDate) + '.png';
 
    
-    const miniseedsdb: string[] = await FileS.ReadMiniSeeds(sd,ed);
+    const miniseedsdb: string[] = await FileS.ReadMiniSeeds(table,sensor,sd,ed);
     //const miniseeds: string[] = await io.getReg();
     //fecha inicio sea mayor o igual a la fecha que me estan mandando , fecha inicio menor o igual al end date
 
@@ -26,6 +26,9 @@ export const generateImage = async(table: string, endDate: Date): Promise<string
         'create24Himg',
         parametros
     );
+
+    const alias = "24Hrs_"+table+"_"+sensor+"_"+sd
+    FileS.InsertImage(table,sensor,"24Hrs",alias,imgPath[0],sd,ed)
 
     //si img path retorna algo correcto lo inserto
 

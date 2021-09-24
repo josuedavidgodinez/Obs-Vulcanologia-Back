@@ -20,6 +20,8 @@ export const columnasImagenes = {
     fechaRegisto: 'fecha_hora_registro'
 }
 export const columnasminiSeeds = {
+    estacion: 'estacion',
+    sensor: 'sensor',
     path: 'ruta_completa',
     fechaInicial: 'fecha_inicial',
     fechaFinal: 'fecha_final',
