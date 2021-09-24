@@ -75,16 +75,31 @@ app.get('/', (req, res) => {
  * 5to * = dia de la semana
  */
 
-cron.schedule('*/1 * * * *', async function () { 
-    console.log(AutoTasks.Test())
+//1
+cron.schedule('*/3 * * * *', async function () { 
+    //console.log(AutoTasks.GenerateMSeed('ise1'))
+});
+//2
+cron.schedule('*/4 * * * *', async function () { 
+    //console.log(AutoTasks.GenerateMSeed('ise2'))
+});
+//3
+cron.schedule('*/5 * * * *', async function () { 
+    //console.log(AutoTasks.GenerateMSeed('e1ms1'))
 });
 
-cron.schedule("0 23 * * *", async function() {
-    AutoTasks.GenerateMSeed('ise1')
-});
 
-cron.schedule("40 23 * * *", async function() {
-    AutoTasks.GetImage('ise1')
+//1
+cron.schedule('*/15 * * * *', async function () { 
+   // console.log(AutoTasks.GetImage('e1ms1'))
+});
+//2
+cron.schedule('*/15 * * * *', async function () { 
+   // console.log(AutoTasks.GetImage('ise2'))
+});
+//3
+cron.schedule("*/15 * * * *", async function() {
+    //AutoTasks.GetImage('ise1')
 });
 
 
