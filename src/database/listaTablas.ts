@@ -3,7 +3,7 @@ lista['e1ms1'] = 'polls_e1ms1';
 lista['ise1'] = 'polls_ise1_infra';
 lista['ise2'] = 'polls_ise2_infra';
 lista['imagenes'] = 'imagenes_obspy2';
-lista['seeds'] = 'archivos_seed'
+lista['seeds'] = 'archivos_seed2'
 export const listaTablas = lista;
 
 const estaciones: { [id: string] : number; } = {};

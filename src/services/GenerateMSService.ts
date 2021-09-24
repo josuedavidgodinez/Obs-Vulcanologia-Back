@@ -9,6 +9,8 @@ interface rowObject{
     fecha_inicial: string,
     fecha_final: string,
     alias: string,
+    estacion: string,
+    sensor: string
     archivo_txt: string,
 }
 
@@ -30,22 +32,26 @@ export const genMiniseeds = async (tabla: string, fechaInicio: Date, fechaFin: D
     for (let index = 0; index < miniseeds.length; index++) {
         const element: string = miniseeds[index];
         const paths = ('' + element).split('\t');//[txt,ms]
+        const s = index + 1;
         regs.push({
             ruta_completa: "'" + paths[1] + "'",
             fecha_inicial: "'" + sd + "'",
             fecha_final: "'" + ed + "'",
             archivo_txt: "'" + paths[0] + "'",
-            alias: "'" + commonAlias + '_' + (index + 1) + "'"
+            alias: "'" + commonAlias + '_' + s + "'",
+            estacion: tabla,
+            sensor: "'" + s + "'"
         });
     }
     const registerDate = "'" + timeService.date2QDate(new Date()) + "'";
     let query = 'INSERT INTO ' + listaTablas['seeds'];
-    query += '(ruta_completa, fecha_inicial, fecha_final, alias, archivo_txt, fecha_hora_registro) VALUES ';
+    query += '(ruta_completa, fecha_inicial, fecha_final, alias, archivo_txt, fecha_hora_registro, estacion, sensor) VALUES ';
     for (let index = 0; index < regs.length; index++) {
         const r = regs[index];
         if(index != 0) query += ',';
         let row = '(' + r.ruta_completa + ',' + r.fecha_inicial + ',' + r.fecha_final;
-        row += ',' + r.alias + ',' + r.archivo_txt + ',' + registerDate + ')';
+        row += ',' + r.alias + ',' + r.archivo_txt + ',' + registerDate;
+        row += ',' + r.estacion + ',' + r.sensor + ')';
         query += row;
     }
     const query_result = await pool.query(query);
