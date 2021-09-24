@@ -26,8 +26,9 @@ export async function GenerateMSeed(table: string) {
 }
 
 
-export async function GetImage(table: string) {
-    generateImage(table, ff).then(imgPath => {
+export async function GetImage(sensor: string, table: string) {
+    let date = new Date();    
+    generateImage(sensor, table, date).then(imgPath => {
         console.log('File created at ', imgPath);
     }).catch((err: Error) => {
         console.log(err.message);
