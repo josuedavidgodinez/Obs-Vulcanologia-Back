@@ -9,6 +9,12 @@ interface graphicDataFormat{
     }[]
 }
 
+const floor2Second = (date: Date) => {
+    const newDate = new Date(date.getTime());
+    newDate.setMilliseconds(0);
+    return newDate;
+}
+
 export const getSensors = async (tabla: string, fechaInicio: string, fechaFin: string): Promise<graphicDataFormat> => {
     fechaInicio = "'" + fechaInicio + "'";
     fechaFin = "'" + fechaFin + "'";
@@ -33,7 +39,6 @@ export const getSensors = async (tabla: string, fechaInicio: string, fechaFin: s
             { nombre: columnasSensores.infrasonido4, mediciones: [] },
         ]
     };
-    console.log('rows: ' + query_result.rowCount.toString());
     const myRows: {fecha: Date, sensores: number[]}[] = query_result.rows.map(r => {
         return {
             fecha: r[columnasSensores.fecha],
@@ -51,8 +56,10 @@ export const getSensors = async (tabla: string, fechaInicio: string, fechaFin: s
     let sumas: number[] = [0,0,0,0];
     const promedios: {fecha: Date, sensores: number[]}[] = []
     myRows.forEach(row => {
-        if(row.fecha.getTime() != lastDate.getTime()){
-            const fecha = new Date(lastDate.getTime());
+        const rowSec = floor2Second(row.fecha);
+        const ldSec = floor2Second(lastDate);
+        if(rowSec.getTime() != ldSec.getTime()){
+            const fecha = ldSec;
             const sensores = [];
             for (let index = 0; index < 4; index++) {
                 sensores.push(Math.round(sumas[index] / repeticiones));
@@ -67,6 +74,16 @@ export const getSensors = async (tabla: string, fechaInicio: string, fechaFin: s
         repeticiones++;
         lastDate = row.fecha;
     });
+    if(repeticiones !=  0){
+        const fecha = floor2Second(lastDate)
+        const sensores = [];
+        for (let index = 0; index < 4; index++) {
+            sensores.push(Math.round(sumas[index] / repeticiones));
+        }
+        promedios.push({fecha, sensores});
+        repeticiones = 0;
+        sumas = [0,0,0,0];
+    }
     promedios.forEach(element => {
         result.fechas.push(element.fecha);
         for (let index = 0; index < 4; index++) {
