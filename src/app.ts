@@ -22,6 +22,7 @@ if (!process.env.DB_PASS){ envVariables++; console.log('DB_PASS missing in .env'
 if (!process.env.ATOMS){ envVariables++; console.log('ATOMS missing in .env'); }
 if (!process.env.OBSPYDATA){ envVariables++; console.log('OBSPYDATA missing in .env'); }
 if (!process.env.IMGFOLDER){ envVariables++; console.log('IMGFOLDER missing in .env'); }
+if (!process.env.TEMPFOLDER){ envVariables++; console.log('TEMPFOLDER missing in .env'); }
 if (envVariables > 0) process.exit(1);
 
 /**
