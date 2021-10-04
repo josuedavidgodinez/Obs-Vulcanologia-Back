@@ -12,25 +12,15 @@ export const generateImage = async(sensor: string,table: string, endDate: Date):
     const imgFolder = await io.getImageFolder();
     const imgName = 'i24H' + timeService.date2number(startDate)
         + '_' +timeService.date2number(endDate) + '.png';
-
    
     const miniseedsdb: string[] = await FileS.ReadMiniSeeds(table,sensor,sd,ed);
-    //const miniseeds: string[] = await io.getReg();
-    //fecha inicio sea mayor o igual a la fecha que me estan mandando , fecha inicio menor o igual al end date
+    const text = miniseedsdb.reduce((a,b) => { return a + '\n' + b});
+    const tempFile = await io.genTempFile(text);
 
-
-    const parametros = [ imgFolder + imgName ]
-    miniseedsdb.forEach(element => parametros.push(element));
-    
-    const imgPath = await runPy(
-        'create24Himg',
-        parametros
-    );
+    const parametros = [ imgFolder + imgName, tempFile ]
+    const imgPath = await runPy('create24Himg', parametros);
 
     const alias = "24Hrs_"+table+"_"+sensor+"_"+sd
-    FileS.InsertImage(table,sensor,"24Hrs",alias,imgPath[0],sd,ed)
-
-    //si img path retorna algo correcto lo inserto
-
+    await FileS.InsertImage(table,sensor,"24Hrs",alias,imgPath[0],sd,ed)
     return imgPath[0];
 }
