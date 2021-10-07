@@ -84,6 +84,7 @@ export const genTempFile = async (text: string): Promise<string> => {
     return path;
 }
 export const a2msFolder = process.env.ATOMS? process.env.ATOMS : '.' + dirchar +'ascii2miniseed';
+export const TEMPFolder = process.env.TEMPFOLDER? process.env.TEMPFOLDER : '.' + dirchar +'obspydata';
 
 export const getImgPrueba = () => {
     return path.resolve('./src/public/imagen_prueba.png')

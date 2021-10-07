@@ -14,37 +14,47 @@ interface rowObject{
     archivo_txt: string,
 }
 
-export const genMiniseeds = async (tabla: string, fechaInicio: Date, fechaFin: Date): Promise<string[]> => {
+export const genMiniseeds= async (tabla: string, fechaInicio: Date, fechaFin: Date): Promise<string[]> => {
     const obspydata = await io.getObsPyDataFolder();
     const ascii2miniseed = io.a2msFolder;
+    const temp = io.TEMPFolder
 
     const sd = timeService.date2QDate(fechaInicio);
+    console.log(sd)
     const ed = timeService.date2QDate(fechaFin);
-    const table = listaEstaciones[tabla].toString();
+    console.log(ed)
+    const table = listaTablas[tabla].toString();
 
     const miniseeds = await runPy(
         'generateMiniSeed',
-        [sd, ed, table, obspydata, ascii2miniseed]
+        [sd, ed, table, obspydata, ascii2miniseed,temp]
     );
 
     const tempFile: string = miniseeds[miniseeds.length - 1];
     const text: string = await io.readFile(tempFile);
+    
+
     const registers: string[] = text.split('\n');
+    
     const msPaths: string[] = [];
     let sqlText: string = 'INSERT INTO ' + listaTablas['seeds'];
-    sqlText += '(ruta_completa, fecha_inicial, fecha_final, alias, archivo_txt, fecha_hora_registro, estacion, sensor) VALUES ';
-    for (let i = 0; i < registers.length; i++) {
+    sqlText += '(ruta_completa, fecha_inicial, fecha_final, alias, estacion, sensor,archivo_txt,fecha_hora_registro) VALUES ';
+    for (let i = 0; i < registers.length-1; i++) {
+        sqlText += '('
         const reg = registers[i].split('\t');
         msPaths.push(reg[0]);
         for (let j = 0; j < reg.length; j++) {
             const item = reg[j];
-            const prefix = i==0?'(':',';
-            sqlText += prefix + ' ' + item;
+            //const prefix = i==0?'(':',';           
+            sqlText += '\''+ item + '\'';
+            if (j != reg.length - 1) sqlText += ',';
         }
-        sqlText += ')'
-        if (i != registers.length - 1) sqlText += ',';
+        sqlText += ',now())'
+        if (i != registers.length - 2) sqlText += ',';
     }
+    console.log(sqlText)
     const query_result = await pool.query(sqlText);
-    if(query_result.rowCount != registers.length) throw new Error('RowCount Inconsistency');
+    console.log(query_result)
+    if(query_result.rowCount != registers.length-1) throw new Error('RowCount Inconsistency');
     return msPaths;
 }

@@ -77,16 +77,16 @@ app.get('/', (req, res) => {
  */
 
 //1
-cron.schedule('*/3 * * * *', async function () { 
-    //console.log(AutoTasks.GenerateMSeed('ise1'))
+cron.schedule('0 */1 * * *', async function () { 
+    console.log(AutoTasks.GenerateMSeed('ise1'))
 });
 //2
-cron.schedule('*/4 * * * *', async function () { 
-    //console.log(AutoTasks.GenerateMSeed('ise2'))
+cron.schedule('0 */1 * * *', async function () { 
+    console.log(AutoTasks.GenerateMSeed('ise2'))
 });
 //3
-cron.schedule('*/5 * * * *', async function () { 
-    //console.log(AutoTasks.GenerateMSeed('e1ms1'))
+cron.schedule('0 */1 * * *', async function () { 
+    console.log(AutoTasks.GenerateMSeed('e1ms1'))
 });
 
 
