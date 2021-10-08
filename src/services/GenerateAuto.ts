@@ -18,7 +18,7 @@ export async function GenerateMSeed(table: string) {
     var f_i = Time.addHours(Time.changeToUTC(fecha_inicial), -12);
     var f_f = Time.addHours(Time.changeToUTC(fecha_inicial), -11);
 
-    genMiniseeds(table, fi, ff).then(miniseeds => {
+    genMiniseeds(table, f_i, f_f).then(miniseeds => {
         console.log(JSON.stringify(miniseeds));
     }).catch((err: Error) => {
         console.log(err.message);
@@ -28,7 +28,8 @@ export async function GenerateMSeed(table: string) {
 
 export async function GetImage(sensor: string, table: string) {
     let date = new Date();
-    generateImage(sensor, table, ff).then(imgPath => {
+    var f_f = Time.addHours(Time.changeToUTC(date), -13);
+    generateImage(sensor, table, f_f).then(imgPath => {
         console.log('File created at ', imgPath);
     }).catch((err: Error) => {
         console.log(err.message);

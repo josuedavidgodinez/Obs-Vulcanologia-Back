@@ -5,13 +5,13 @@ import * as io from "./FileService";
 import { runPy } from "./pythonService";
 import * as FileS from "./FileServiceDB"
 export const generateImage = async(sensor: string,table: string, endDate: Date): Promise<string> => {
-    const startDate = timeService.addHours(endDate, -1);
+    const startDate = timeService.addHours(endDate, -24);
     const sd = timeService.date2QDate(startDate);
     const ed = timeService.date2QDate(endDate);
 
     const imgFolder = await io.getImageFolder();
     const imgName = 'i24H' + timeService.date2number(startDate)
-        + '_' +timeService.date2number(endDate) + '.png';
+        + '_' +timeService.date2number(endDate) + '_' +table+ '_' +sensor+  '.png';
     const miniseedsdb: string[] = await FileS.ReadMiniSeeds(table,sensor,sd,ed);
     const text = miniseedsdb.reduce((a,b) => { return a + '\n' + b});
     console.log(text);
