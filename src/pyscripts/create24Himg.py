@@ -14,10 +14,10 @@ import time
 from datetime import datetime, timedelta
 from obspy import UTCDateTime, read, Trace, Stream
 
-# imgPath = sys.argv[1]
-# filePath = sys.argv[2]
-imgPath = '/home/litedev/Downloads/tempFolder/prueba1.png'
-filePath = '/home/litedev/Downloads/tempFolder/prueba1.txt'
+imgPath = sys.argv[1]
+filePath = sys.argv[2]
+#imgPath = '/home/litedev/Downloads/tempFolder/prueba1.png'
+#filePath = '/home/litedev/Downloads/tempFolder/prueba1.txt'
 
 txt = ''
 with open(filePath,'r') as f:
