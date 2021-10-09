@@ -16,11 +16,11 @@ txt=''
 with open(filePath,'r') as f:
     txt=f.read()
 miniseeds=txt.split('\n')
-st=read(miniseeds[0])
+st=read(miniseeds[0].replace('\r',''))
 if(len(miniseeds)>1):
     for i in range (1,len(miniseeds)):
         if len(miniseeds[i]) > 0:
-            st+=read(miniseeds[i])
+            st+=read(miniseeds[i].replace('\r',''))
 
 import matplotlib
 matplotlib.use('Agg')

@@ -91,16 +91,25 @@ cron.schedule('0 */1 * * *', async function () {
 
 
 //1
-cron.schedule('*/15 * * * *', async function () { 
-   // console.log(AutoTasks.GetImage('e1ms1'))
+cron.schedule('0 */15 * * * *', async function () { 
+   console.log(AutoTasks.GetImage('1','e1ms1'))
+   console.log(AutoTasks.GetImage('2','e1ms1'))
+   console.log(AutoTasks.GetImage('3','e1ms1'))
+   console.log(AutoTasks.GetImage('4','e1ms1'))
 });
 //2
-cron.schedule('*/15 * * * *', async function () { 
-   // console.log(AutoTasks.GetImage('ise2'))
+cron.schedule('0 */15 * * * *', async function () { 
+    console.log(AutoTasks.GetImage('1','ise2'))
+    console.log(AutoTasks.GetImage('2','ise2'))
+    console.log(AutoTasks.GetImage('3','ise2'))
+     console.log(AutoTasks.GetImage('4','ise2'))
 });
 //3
-cron.schedule("*/15 * * * *", async function() {
-    //AutoTasks.GetImage('ise1')
+cron.schedule("0 */15 * * * *", async function() {
+   console.log(AutoTasks.GetImage('1','ise1'))
+   console.log(AutoTasks.GetImage('2','ise1'))
+    console.log(AutoTasks.GetImage('3','ise1'))
+   console.log(AutoTasks.GetImage('4','ise1'))
 });
 
 

@@ -5,8 +5,8 @@ import * as Check from '../services/CheckService';
 import { listaTipos } from "../models/listaTipoMedia";
 import * as Time from '../services/TimeService'
 
-const fi = new Date('2021-09-24T05:00:00-06:00');
-const ff = new Date('2021-09-24T06:00:00-06:00');
+const fi = new Date('2021-10-01T10:02:00-06:00');
+const ff = new Date('2021-10-01T11:02:00-06:00');
 var archivo_seed_ocupado = 0;
 
 export function Test(): string {
@@ -18,7 +18,7 @@ export async function GenerateMSeed(table: string) {
     var f_i = Time.addHours(Time.changeToUTC(fecha_inicial), -12);
     var f_f = Time.addHours(Time.changeToUTC(fecha_inicial), -11);
 
-    genMiniseeds(table, fi, ff).then(miniseeds => {
+    genMiniseeds(table, f_i, f_f).then(miniseeds => {
         console.log(JSON.stringify(miniseeds));
     }).catch((err: Error) => {
         console.log(err.message);
@@ -28,7 +28,8 @@ export async function GenerateMSeed(table: string) {
 
 export async function GetImage(sensor: string, table: string) {
     let date = new Date();
-    generateImage(sensor, table, date).then(imgPath => {
+    var f_f = Time.addHours(Time.changeToUTC(date), -13);
+    generateImage(sensor, table, f_f).then(imgPath => {
         console.log('File created at ', imgPath);
     }).catch((err: Error) => {
         console.log(err.message);

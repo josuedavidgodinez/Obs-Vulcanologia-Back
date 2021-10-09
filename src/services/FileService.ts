@@ -80,7 +80,7 @@ const randId = () => {
 }
 export const genTempFile = async (text: string): Promise<string> => {
     const id = randId() + '_' + date2number(new Date());
-    const path = await getTempFolder() + id + 'txt';
+    const path = await getTempFolder() + id + '.txt';
     return path;
 }
 export const a2msFolder = process.env.ATOMS? process.env.ATOMS : '.' + dirchar +'ascii2miniseed';
