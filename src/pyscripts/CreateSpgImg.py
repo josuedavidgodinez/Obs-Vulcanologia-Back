@@ -1,10 +1,12 @@
 from __future__ import print_function, with_statement
 #from  obspy import read
 import os
+import sys
 import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
 from obspy import UTCDateTime, read, Trace, Stream
+
 
 imgPath = sys.argv[1]
 filePath = sys.argv[2]
