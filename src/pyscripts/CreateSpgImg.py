@@ -6,11 +6,11 @@ import pandas as pd
 from datetime import datetime, timedelta
 from obspy import UTCDateTime, read, Trace, Stream
 
-# imgPath = sys.argv[1]
-# filePath = sys.argv[2]
+imgPath = sys.argv[1]
+filePath = sys.argv[2]
 
-imgPath = '/home/ubuntu/Downloads/tempData/prueba1.png'
-filePath = '/home/ubuntu/Downloads/tempData/prueba.txt'
+#imgPath = '/home/ubuntu/Downloads/tempData/prueba1.png'
+#filePath = '/home/ubuntu/Downloads/tempData/prueba.txt'
 
 txt=''
 with open(filePath,'r') as f:
