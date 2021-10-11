@@ -174,7 +174,7 @@ for g in grupos:
     nowstr = now.strftime("%Y%m%d_%H%M%S")
     for i in range(0,4):
         sen = i + 1
-        g.rutas_txt[i] = datafolder + nowstr + 'mseed' + str(sen) + '.txt'
+        g.rutas_txt[i] = datafolder + nowstr + '_' + estacion + '_' + 'mseed' + str(sen) + '.txt'
         g.rutas_ms[i] = datafolder + nowstr + '_GI_' + estacion + 'I_0' + str(sen) + '_BDF_D_' + g.getStamp() + '.mseed'
         header = 'TIMESERIES GI_' + estacion + 'I_0' + str(sen) +'_BDF_D, '+str(g.cuenta) + ' samples, ' + str(g.getSPS()) + ' sps, ' + g.getStamp() +', SLIST, INTEGER, Counts\r\n'
         textFile = open(g.rutas_txt[i], "w")
