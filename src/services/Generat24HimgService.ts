@@ -14,12 +14,12 @@ export const generateImage = async(sensor: string,table: string, endDate: Date):
         + '_' +timeService.date2number(endDate) + '_' +table+ '_' +sensor+  '.png';
     const miniseedsdb: string[] = await FileS.ReadMiniSeeds(table,sensor,sd,ed);
     const text = miniseedsdb.reduce((a,b) => { return a + '\n' + b});
-    console.log(text);
+        console.log(text);
     const tempFile = await io.genTempFile(text);
     await io.writeFile(tempFile,text,false);
     const parametros = [ imgFolder + imgName, tempFile ]
     const imgPath = await runPy('create24Himg', parametros);
-    console.log(imgPath)
+        console.log(imgPath)
 
     const alias = "24Hrs_"+table;
     await FileS.InsertImage(table,sensor,"24Hrs",alias,imgPath[0],sd,ed)

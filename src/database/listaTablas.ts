@@ -11,3 +11,9 @@ estaciones['e1ms1'] = 3;
 estaciones['ise1'] = 1;
 estaciones['ise2'] = 2;
 export const listaEstaciones = estaciones;
+
+const lista_imagenes: { [id: string] : string; } = {};
+lista_imagenes['e1ms1'] = 'e1ms1';
+lista_imagenes['ise1'] = 'ise1';
+lista_imagenes['ise2'] = 'ise2';
+export const listaImagenes = lista_imagenes;

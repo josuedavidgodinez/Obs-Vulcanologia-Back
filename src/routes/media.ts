@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { listaTablas } from "../database/listaTablas";
+import { listaImagenes, listaTablas } from "../database/listaTablas";
 import { listaTipos } from "../models/listaTipoMedia";
 import { getImgPath } from "../services/MediaService";
 import * as timeService from "../services/TimeService";
@@ -16,7 +16,7 @@ const badRequestObject = (message: string) => {
 
 // host/media/estacion/sensor/tipo?fhi=_fechaHoraInicio&fhf=_fechaHoraFin
 media.get('/:estacion/:sensor/:tipo', (req,  res) => {    
-    const estacion: string = listaTablas[req.params.estacion];
+    const estacion: string = listaImagenes[req.params.estacion];
     const sensor: number = +req.params.sensor;
     const tipo: string = listaTipos[req.params.tipo];
     if(!estacion) {
