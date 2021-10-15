@@ -28,9 +28,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getImgPrueba = exports.getReg = exports.addReg = exports.a2msFolder = exports.getImageFolder = exports.getObsPyDataFolder = exports.getPyScript = exports.readFile = exports.writeFile = exports.fileExists = exports.createFolderIfNotExists = void 0;
+exports.getImgPrueba = exports.TEMPFolder = exports.a2msFolder = exports.genTempFile = exports.getImageFolder = exports.getObsPyDataFolder = exports.getPyScript = exports.readFile = exports.deleteFile = exports.writeFile = exports.fileExists = exports.createFolderIfNotExists = void 0;
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
+const TimeService_1 = require("./TimeService");
 const dirchar = process.env.DIRCHAR ? process.env.DIRCHAR : '/';
 const createFolderIfNotExists = (folder) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -54,13 +55,20 @@ const fileExists = (filePath) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.fileExists = fileExists;
 const writeFile = (path, text, append) => __awaiter(void 0, void 0, void 0, function* () {
-    const exist = yield exports.fileExists(path);
+    const exist = yield (0, exports.fileExists)(path);
     if (exist && append)
         yield fs.promises.appendFile(path, text);
     else
         yield fs.promises.writeFile(path, text);
 });
 exports.writeFile = writeFile;
+const deleteFile = (path) => __awaiter(void 0, void 0, void 0, function* () {
+    const exist = yield (0, exports.fileExists)(path);
+    if (!exist)
+        throw new Error(path + ' no exist');
+    yield fs.promises.unlink(path);
+});
+exports.deleteFile = deleteFile;
 const rf = (path) => {
     return new Promise((resolve, reject) => {
         fs.readFile(path, (err, data) => {
@@ -73,7 +81,7 @@ const rf = (path) => {
     });
 };
 const readFile = (path) => __awaiter(void 0, void 0, void 0, function* () {
-    const exist = yield exports.fileExists(path);
+    const exist = yield (0, exports.fileExists)(path);
     if (!exist)
         throw new Error("File not exists");
     const content = yield rf(path);
@@ -86,7 +94,7 @@ const getPyScript = (scriptname) => {
 exports.getPyScript = getPyScript;
 const getObsPyDataFolder = () => __awaiter(void 0, void 0, void 0, function* () {
     const folder = process.env.OBSPYDATA ? process.env.OBSPYDATA : '.' + dirchar + 'obspydata';
-    const r = yield exports.createFolderIfNotExists(folder);
+    const r = yield (0, exports.createFolderIfNotExists)(folder);
     if (r)
         console.log(folder + ' created');
     return folder;
@@ -94,33 +102,36 @@ const getObsPyDataFolder = () => __awaiter(void 0, void 0, void 0, function* () 
 exports.getObsPyDataFolder = getObsPyDataFolder;
 const getImageFolder = () => __awaiter(void 0, void 0, void 0, function* () {
     const folder = process.env.IMGFOLDER ? process.env.IMGFOLDER : '.' + dirchar + 'obspydata';
-    const r = yield exports.createFolderIfNotExists(folder);
+    const r = yield (0, exports.createFolderIfNotExists)(folder);
     if (r)
         console.log(folder + ' created');
     return folder;
 });
 exports.getImageFolder = getImageFolder;
+const getTempFolder = () => __awaiter(void 0, void 0, void 0, function* () {
+    const folder = process.env.TEMPFOLDER ? process.env.TEMPFOLDER : '.' + dirchar + 'obspydata';
+    const r = yield (0, exports.createFolderIfNotExists)(folder);
+    if (r)
+        console.log(folder + ' created');
+    return folder;
+});
+const randId = () => {
+    var result = '';
+    var characters = 'abcdefghijklmnopqrstuvwxyz';
+    for (var i = 0; i < 16; i++) {
+        const index = Math.floor(Math.random() * characters.length);
+        result += characters[index];
+    }
+    return result;
+};
+const genTempFile = (text) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = randId() + '_' + (0, TimeService_1.date2number)(new Date());
+    const path = (yield getTempFolder()) + id + '.txt';
+    return path;
+});
+exports.genTempFile = genTempFile;
 exports.a2msFolder = process.env.ATOMS ? process.env.ATOMS : '.' + dirchar + 'ascii2miniseed';
-//Borrar cuando se cambie a base de datos
-const miniseedRegs = () => __awaiter(void 0, void 0, void 0, function* () {
-    const obspydata = yield exports.getObsPyDataFolder();
-    return obspydata + 'listams.txt';
-});
-const addReg = (reg) => __awaiter(void 0, void 0, void 0, function* () {
-    const file = yield miniseedRegs();
-    let text = '';
-    reg.forEach(element => {
-        text += element + '\n';
-    });
-    yield exports.writeFile(file, text, true);
-});
-exports.addReg = addReg;
-const getReg = () => __awaiter(void 0, void 0, void 0, function* () {
-    const file = yield miniseedRegs();
-    const content = yield exports.readFile(file);
-    return content.split('\n');
-});
-exports.getReg = getReg;
+exports.TEMPFolder = process.env.TEMPFOLDER ? process.env.TEMPFOLDER : '.' + dirchar + 'obspydata';
 const getImgPrueba = () => {
     return path.resolve('./src/public/imagen_prueba.png');
 };

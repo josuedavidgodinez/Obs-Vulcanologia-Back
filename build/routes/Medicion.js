@@ -24,7 +24,7 @@ const listaTablas_1 = require("../database/listaTablas");
 const statusCode_1 = require("../models/statusCode");
 const sensorService = __importStar(require("../services/SensorService"));
 const timeService = __importStar(require("../services/TimeService"));
-const med = express_1.Router();
+const med = (0, express_1.Router)();
 // host/med/tabla?fhi=_fechaHoraInicio&fhf=_fechaHoraFin
 med.get('/:tabla', function (req, res) {
     const tabla = listaTablas_1.listaTablas[req.params.tabla];
@@ -83,8 +83,8 @@ med.get('/:tabla/LecturaInicio', function (req, res) {
     }
     const fecha_actual = new Date();
     const fecha_ayer = timeService.addHours(fecha_actual, -24);
-    const fecha_compuesta_inicial = timeService.date2QDate(fecha_actual);
-    const fecha_compuesta_final = timeService.date2QDate(fecha_ayer);
+    const fecha_compuesta_inicial = timeService.date2QDate(fecha_ayer);
+    const fecha_compuesta_final = timeService.date2QDate(fecha_actual);
     sensorService.getSensors(tabla, fecha_compuesta_inicial, fecha_compuesta_final).then(data => {
         res.status(statusCode_1.statusCode.ok)
             .json({

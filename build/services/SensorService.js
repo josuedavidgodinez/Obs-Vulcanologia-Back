@@ -15,6 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSensors = void 0;
 const db_1 = __importDefault(require("../database/db"));
 const listaAtributos_1 = require("../models/listaAtributos");
+const floor2Second = (date) => {
+    const newDate = new Date(date.getTime());
+    newDate.setMilliseconds(0);
+    return newDate;
+};
 const getSensors = (tabla, fechaInicio, fechaFin) => __awaiter(void 0, void 0, void 0, function* () {
     fechaInicio = "'" + fechaInicio + "'";
     fechaFin = "'" + fechaFin + "'";
@@ -27,6 +32,7 @@ const getSensors = (tabla, fechaInicio, fechaFin) => __awaiter(void 0, void 0, v
     query += ' FROM ' + tabla;
     query += ' WHERE ' + listaAtributos_1.columnasSensores.fecha + ' >= ' + fechaInicio;
     query += ' AND ' + listaAtributos_1.columnasSensores.fecha + ' <= ' + fechaFin;
+    query += ' ORDER BY ' + listaAtributos_1.columnasSensores.fecha;
     const query_result = yield db_1.default.query(query);
     const result = {
         fechas: [],
@@ -37,12 +43,57 @@ const getSensors = (tabla, fechaInicio, fechaFin) => __awaiter(void 0, void 0, v
             { nombre: listaAtributos_1.columnasSensores.infrasonido4, mediciones: [] },
         ]
     };
-    query_result.rows.forEach(element => {
-        result.fechas.push(element[listaAtributos_1.columnasSensores.fecha]);
-        result.sensores[0].mediciones.push(element[listaAtributos_1.columnasSensores.infrasonido1]);
-        result.sensores[1].mediciones.push(element[listaAtributos_1.columnasSensores.infrasonido2]);
-        result.sensores[2].mediciones.push(element[listaAtributos_1.columnasSensores.infrasonido3]);
-        result.sensores[3].mediciones.push(element[listaAtributos_1.columnasSensores.infrasonido4]);
+    const myRows = query_result.rows.map(r => {
+        return {
+            fecha: r[listaAtributos_1.columnasSensores.fecha],
+            sensores: [
+                r[listaAtributos_1.columnasSensores.infrasonido1],
+                r[listaAtributos_1.columnasSensores.infrasonido2],
+                r[listaAtributos_1.columnasSensores.infrasonido3],
+                r[listaAtributos_1.columnasSensores.infrasonido4],
+            ]
+        };
+    });
+    if (myRows.length == 0)
+        return result;
+    let lastDate = myRows[0].fecha;
+    let repeticiones = 0;
+    let sumas = [0, 0, 0, 0];
+    const promedios = [];
+    myRows.forEach(row => {
+        const rowSec = floor2Second(row.fecha);
+        const ldSec = floor2Second(lastDate);
+        if (rowSec.getTime() != ldSec.getTime()) {
+            const fecha = ldSec;
+            const sensores = [];
+            for (let index = 0; index < 4; index++) {
+                sensores.push(Math.round(sumas[index] / repeticiones));
+            }
+            promedios.push({ fecha, sensores });
+            repeticiones = 0;
+            sumas = [0, 0, 0, 0];
+        }
+        for (let index = 0; index < 4; index++) {
+            sumas[index] += row.sensores[index];
+        }
+        repeticiones++;
+        lastDate = row.fecha;
+    });
+    if (repeticiones != 0) {
+        const fecha = floor2Second(lastDate);
+        const sensores = [];
+        for (let index = 0; index < 4; index++) {
+            sensores.push(Math.round(sumas[index] / repeticiones));
+        }
+        promedios.push({ fecha, sensores });
+        repeticiones = 0;
+        sumas = [0, 0, 0, 0];
+    }
+    promedios.forEach(element => {
+        result.fechas.push(element.fecha);
+        for (let index = 0; index < 4; index++) {
+            result.sensores[index].mediciones.push(element.sensores[index]);
+        }
     });
     return result;
 });

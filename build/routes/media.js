@@ -25,7 +25,7 @@ const listaTipoMedia_1 = require("../models/listaTipoMedia");
 const MediaService_1 = require("../services/MediaService");
 const timeService = __importStar(require("../services/TimeService"));
 const statusCode_1 = require("../models/statusCode");
-const media = express_1.Router();
+const media = (0, express_1.Router)();
 const badRequestObject = (message) => {
     return {
         message,
@@ -34,7 +34,7 @@ const badRequestObject = (message) => {
 };
 // host/media/estacion/sensor/tipo?fhi=_fechaHoraInicio&fhf=_fechaHoraFin
 media.get('/:estacion/:sensor/:tipo', (req, res) => {
-    const estacion = listaTablas_1.listaTablas[req.params.estacion];
+    const estacion = listaTablas_1.listaImagenes[req.params.estacion];
     const sensor = +req.params.sensor;
     const tipo = listaTipoMedia_1.listaTipos[req.params.tipo];
     if (!estacion) {
@@ -60,7 +60,7 @@ media.get('/:estacion/:sensor/:tipo', (req, res) => {
     const url_query = req.query;
     const fecha_i = timeService.validateDTurlFormat(url_query.fhi);
     const fecha_f = timeService.validateDTurlFormat(url_query.fhf);
-    MediaService_1.getImgPath(estacion, sensor, tipo, fecha_i, fecha_f).then(path => {
+    (0, MediaService_1.getImgPath)(estacion, sensor, tipo, fecha_i, fecha_f).then(path => {
         res.status(statusCode_1.statusCode.ok)
             .sendFile(path);
     }).catch((err) => {

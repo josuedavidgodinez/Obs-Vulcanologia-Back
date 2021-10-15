@@ -22,7 +22,7 @@ dayplot.get('/genMiniseed', (req,  res) => {
     });
 });
 dayplot.get('/getImg', (req, res) => {
-    generateImage('ise1', ff).then(imgPath => {
+    generateImage('ise1','polls_ise1_infra', ff).then(imgPath => {
         res.status(statusCode.ok)
         .sendFile(imgPath);
     }).catch((err: Error) => {

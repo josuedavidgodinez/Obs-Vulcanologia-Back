@@ -1,15 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.listaEstaciones = exports.listaTablas = void 0;
+exports.listaImagenes = exports.listaEstaciones = exports.listaTablas = void 0;
 const lista = {};
 lista['e1ms1'] = 'polls_e1ms1';
 lista['ise1'] = 'polls_ise1_infra';
 lista['ise2'] = 'polls_ise2_infra';
 lista['imagenes'] = 'imagenes_obspy2';
+lista['seeds'] = 'archivos_seed2';
 exports.listaTablas = lista;
 const estaciones = {};
 estaciones['e1ms1'] = 3;
 estaciones['ise1'] = 1;
 estaciones['ise2'] = 2;
 exports.listaEstaciones = estaciones;
+const lista_imagenes = {};
+lista_imagenes['e1ms1'] = 'e1ms1';
+lista_imagenes['ise1'] = 'ise1';
+lista_imagenes['ise2'] = 'ise2';
+exports.listaImagenes = lista_imagenes;
 //# sourceMappingURL=listaTablas.js.map

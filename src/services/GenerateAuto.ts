@@ -1,6 +1,8 @@
 ///Funciones a ejecutar de forma automatica
 import { genMiniseeds } from "../services/GenerateMSService";
 import { generateImage } from "../services/Generat24HimgService";
+import { generateImage as generateImageSp  } from "../services/GeneratSpimgService";
+
 import * as Check from '../services/CheckService';
 import { listaTipos } from "../models/listaTipoMedia";
 import * as Time from '../services/TimeService'
@@ -35,3 +37,14 @@ export async function GetImage(sensor: string, table: string) {
         console.log(err.message);
     });
 }
+
+export async function GetImageSp(sensor: string, table: string) {
+    let date = new Date();
+    var f_f = Time.addHours(Time.changeToUTC(date), -13);
+    generateImageSp(sensor, table, f_f).then(imgPath => {
+        console.log('File created at ', imgPath);
+    }).catch((err: Error) => {
+        console.log(err.message);
+    });
+}
+

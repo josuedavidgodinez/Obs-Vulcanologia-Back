@@ -32,18 +32,24 @@ exports.generateImage = void 0;
 const timeService = __importStar(require("./TimeService"));
 const io = __importStar(require("./FileService"));
 const pythonService_1 = require("./pythonService");
-const generateImage = (table, endDate) => __awaiter(void 0, void 0, void 0, function* () {
+const FileS = __importStar(require("./FileServiceDB"));
+const generateImage = (sensor, table, endDate) => __awaiter(void 0, void 0, void 0, function* () {
     const startDate = timeService.addHours(endDate, -24);
     const sd = timeService.date2QDate(startDate);
     const ed = timeService.date2QDate(endDate);
     const imgFolder = yield io.getImageFolder();
     const imgName = 'i24H' + timeService.date2number(startDate)
-        + '_' + timeService.date2number(endDate) + '.png';
-    // Cambiar a base de datos cuando sea posible
-    const miniseeds = yield io.getReg();
-    const parametros = [imgFolder + imgName];
-    miniseeds.forEach(element => parametros.push(element));
-    const imgPath = yield pythonService_1.runPy('create24Himg', parametros);
+        + '_' + timeService.date2number(endDate) + '_' + table + '_' + sensor + '.png';
+    const miniseedsdb = yield FileS.ReadMiniSeeds(table, sensor, sd, ed);
+    const text = miniseedsdb.reduce((a, b) => { return a + '\n' + b; });
+    console.log(text);
+    const tempFile = yield io.genTempFile(text);
+    yield io.writeFile(tempFile, text, false);
+    const parametros = [imgFolder + imgName, tempFile];
+    const imgPath = yield (0, pythonService_1.runPy)('create24Himg', parametros);
+    console.log(imgPath);
+    const alias = "24Hrs_" + table;
+    yield FileS.InsertImage(table, sensor, "24Hrs", alias, imgPath[0], sd, ed);
     return imgPath[0];
 });
 exports.generateImage = generateImage;
