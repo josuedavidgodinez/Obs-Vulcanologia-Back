@@ -42,7 +42,7 @@ export async function GetImageSp(sensor: string, table: string) {
     let date = new Date();
     var f_f = Time.addHours(Time.changeToUTC(date), -13);
     generateImageSp(sensor, table, f_f).then(imgPath => {
-        console.log('File created at ', imgPath);
+        console.log('File Spectrogram created at ', imgPath);
     }).catch((err: Error) => {
         console.log(err.message);
     });
