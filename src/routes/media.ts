@@ -4,6 +4,7 @@ import { listaTipos } from "../models/listaTipoMedia";
 import { getImgPath } from "../services/MediaService";
 import * as timeService from "../services/TimeService";
 import { statusCode } from "../models/statusCode";
+import { getLastPhoto } from '../services/GetPhoto';
 
 const media: Router =  Router();
 
@@ -55,5 +56,19 @@ media.get('/:estacion/:sensor/:tipo', (req,  res) => {
         });
     });
 });
+
+media.get('/lastPhoto', (req, res) => {
+    getLastPhoto().then(path => {
+        res.status(statusCode.ok)
+        .sendFile(path);
+    }).catch((err: Error) => {
+        res.status(statusCode.conflict)
+        .json({
+            status: statusCode.conflict,
+            name: err.name,
+            message: err.message
+        });
+    });
+})
 
 export default media;
