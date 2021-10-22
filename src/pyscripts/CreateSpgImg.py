@@ -28,4 +28,6 @@ import matplotlib
 matplotlib.use('Agg')
 
 st.spectrogram(log=True, title='Espectrograma', outfile=imgPath)
+
+print(imgPath)
 os.remove(filePath)
