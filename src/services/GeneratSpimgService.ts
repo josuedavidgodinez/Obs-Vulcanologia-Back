@@ -6,8 +6,11 @@ import { runPy } from "./pythonService";
 import * as FileS from "./FileServiceDB"
 export const generateImage = async(sensor: string,table: string, endDate: Date): Promise<string> => {
     const startDate = timeService.addHours(endDate, -24);
-    const sd = timeService.date2QDate(startDate);
-    const ed = timeService.date2QDate(endDate);
+
+const fi = new Date('2021-10-01T10:02:00-06:00');
+const ff = new Date('2021-10-01T11:02:00-06:00');
+    const sd = timeService.date2QDate(fi);
+    const ed = timeService.date2QDate(ff);
 
     const imgFolder = await io.getImageFolder();
     const imgName = 'ieg' + timeService.date2number(startDate)

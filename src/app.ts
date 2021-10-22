@@ -93,50 +93,67 @@ cron.schedule('0 */1 * * *', async function () {
 //24 HOURS PLOT
 //1
 cron.schedule('0 */15 * * * *', async function () { 
-   console.log(AutoTasks.GetImage('1','e1ms1'))
-   console.log(AutoTasks.GetImage('2','e1ms1'))
-   console.log(AutoTasks.GetImage('3','e1ms1'))
-   console.log(AutoTasks.GetImage('4','e1ms1'))
+   console.log(await AutoTasks.GetImage('1','e1ms1'))
+   console.log(await AutoTasks.GetImage('2','e1ms1'))
+   console.log(await AutoTasks.GetImage('3','e1ms1'))
+   console.log(await AutoTasks.GetImage('4','e1ms1'))
 });
 //2
 cron.schedule('0 */15 * * * *', async function () { 
-    console.log(AutoTasks.GetImage('1','ise2'))
-    console.log(AutoTasks.GetImage('2','ise2'))
-    console.log(AutoTasks.GetImage('3','ise2'))
-     console.log(AutoTasks.GetImage('4','ise2'))
+    console.log(await AutoTasks.GetImage('1','ise2'))
+    console.log(await AutoTasks.GetImage('2','ise2'))
+    console.log(await AutoTasks.GetImage('3','ise2'))
+     console.log(await AutoTasks.GetImage('4','ise2'))
 });
 //3
 cron.schedule("0 */15 * * * *", async function() {
-   console.log(AutoTasks.GetImage('1','ise1'))
-   console.log(AutoTasks.GetImage('2','ise1'))
-    console.log(AutoTasks.GetImage('3','ise1'))
-   console.log(AutoTasks.GetImage('4','ise1'))
+   console.log(await AutoTasks.GetImage('1','ise1'))
+   console.log(await AutoTasks.GetImage('2','ise1'))
+    console.log(await AutoTasks.GetImage('3','ise1'))
+   console.log(await AutoTasks.GetImage('4','ise1'))
 });
 
 //SPECTROGRAM PLOT
 //1
+
 cron.schedule('0 */15 * * * *', async function () { 
-    console.log(AutoTasks.GetImageSp('1','e1ms1'))
-    console.log(AutoTasks.GetImageSp('2','e1ms1'))
-    console.log(AutoTasks.GetImageSp('3','e1ms1'))
-    console.log(AutoTasks.GetImageSp('4','e1ms1'))
+    await SP_e1ms1();
+    await SP_ise1();
+    await SP_ise2();
  });
  //2
- cron.schedule('0 */15 * * * *', async function () { 
-     console.log(AutoTasks.GetImageSp('1','ise2'))
-     console.log(AutoTasks.GetImageSp('2','ise2'))
-     console.log(AutoTasks.GetImageSp('3','ise2'))
-      console.log(AutoTasks.GetImageSp('4','ise2'))
+ cron.schedule('0 */20 * * * *', async function () { 
+  //   console.log(AutoTasks.GetImageSp('1','ise2'))
+   //  console.log(AutoTasks.GetImageSp('2','ise2'))
+   //  console.log(AutoTasks.GetImageSp('3','ise2'))
+   //   console.log(AutoTasks.GetImageSp('4','ise2'))
  });
  //3
- cron.schedule("0 */15 * * * *", async function() {
-    console.log(AutoTasks.GetImageSp  ('1','ise1'))
-    console.log(AutoTasks.GetImageSp  ('2','ise1'))
-     console.log(AutoTasks.GetImageSp ('3','ise1'))
-    console.log(AutoTasks.GetImageSp  ('4','ise1'))
+ cron.schedule("0 */20 * * * *", async function() {
+  //  console.log(AutoTasks.GetImageSp  ('1','ise1'))
+  //  console.log(AutoTasks.GetImageSp  ('2','ise1'))
+  //   console.log(AutoTasks.GetImageSp ('3','ise1'))
+  //  console.log(AutoTasks.GetImageSp  ('4','ise1'))
  });
 
-
+async function SP_e1ms1(){
+    console.log(await AutoTasks.GetImageSp('1','e1ms1'))
+   console.log(await AutoTasks.GetImageSp('2','e1ms1'))
+    console.log(await AutoTasks.GetImageSp('3','e1ms1'))
+    console.log(await AutoTasks.GetImageSp('4','e1ms1'))
+}
+async function SP_ise1(){
+    console.log(await AutoTasks.GetImageSp('1','ise1'))
+   console.log(await AutoTasks.GetImageSp('2','ise1'))
+    console.log(await AutoTasks.GetImageSp('3','ise1'))
+    console.log(await AutoTasks.GetImageSp('4','ise1'))
+}
+async function SP_ise2(){
+    console.log(await AutoTasks.GetImageSp('1','ise2'))
+   console.log(await AutoTasks.GetImageSp('2','ise2'))
+    console.log(await AutoTasks.GetImageSp('3','ise2'))
+    console.log(await AutoTasks.GetImageSp('4','ise2'))
+}
 /**
  * Server Activation
 */
