@@ -15,14 +15,14 @@ if (!process.env.DB_PORT) { process.env.DB_PORT = "5432"; }
 
 let envVariables = 0;
 // if (!process.env.variable){ envVariables++; console.log('variable missing in .env'); }
-if (!process.env.DB_USER){ envVariables++; console.log('DB_USER missing in .env'); }
-if (!process.env.HOST){ envVariables++; console.log('HOST missing in .env'); }
-if (!process.env.DB){ envVariables++; console.log('DB missing in .env'); }
-if (!process.env.DB_PASS){ envVariables++; console.log('DB_PASS missing in .env'); }
-if (!process.env.ATOMS){ envVariables++; console.log('ATOMS missing in .env'); }
-if (!process.env.OBSPYDATA){ envVariables++; console.log('OBSPYDATA missing in .env'); }
-if (!process.env.IMGFOLDER){ envVariables++; console.log('IMGFOLDER missing in .env'); }
-if (!process.env.TEMPFOLDER){ envVariables++; console.log('TEMPFOLDER missing in .env'); }
+if (!process.env.DB_USER) { envVariables++; console.log('DB_USER missing in .env'); }
+if (!process.env.HOST) { envVariables++; console.log('HOST missing in .env'); }
+if (!process.env.DB) { envVariables++; console.log('DB missing in .env'); }
+if (!process.env.DB_PASS) { envVariables++; console.log('DB_PASS missing in .env'); }
+if (!process.env.ATOMS) { envVariables++; console.log('ATOMS missing in .env'); }
+if (!process.env.OBSPYDATA) { envVariables++; console.log('OBSPYDATA missing in .env'); }
+if (!process.env.IMGFOLDER) { envVariables++; console.log('IMGFOLDER missing in .env'); }
+if (!process.env.TEMPFOLDER) { envVariables++; console.log('TEMPFOLDER missing in .env'); }
 if (envVariables > 0) process.exit(1);
 
 /**
@@ -54,16 +54,16 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/med', medicion); // site/med/
-app.use('/dayplot', dayplot );// site/dateplot
+app.use('/dayplot', dayplot);// site/dateplot
 app.use('/media', media); // site/media
-app.use('/see',see); //pruebas de servicios de seeds e imagenes
+app.use('/see', see); //pruebas de servicios de seeds e imagenes
 
 app.get('/', (req, res) => {
     res.status(statusCode.ok)
         .json({
             message: "API is listening",
             date: new Date()
-    });
+        });
 });
 
 
@@ -77,82 +77,66 @@ app.get('/', (req, res) => {
  */
 
 //1
-cron.schedule('0 */1 * * *', async function () { 
+cron.schedule('0 */1 * * *', async function () {
     console.log(AutoTasks.GenerateMSeed('ise1'))
 });
 //2
-cron.schedule('0 */1 * * *', async function () { 
+cron.schedule('0 */1 * * *', async function () {
     console.log(AutoTasks.GenerateMSeed('ise2'))
 });
 //3
-cron.schedule('0 */1 * * *', async function () { 
+cron.schedule('0 */1 * * *', async function () {
     console.log(AutoTasks.GenerateMSeed('e1ms1'))
 });
 
 
-//24 HOURS PLOT
-//1
-cron.schedule('0 */15 * * * *', async function () { 
-   console.log(await AutoTasks.GetImage('1','e1ms1'))
-   console.log(await AutoTasks.GetImage('2','e1ms1'))
-   console.log(await AutoTasks.GetImage('3','e1ms1'))
-   console.log(await AutoTasks.GetImage('4','e1ms1'))
-});
-//2
-cron.schedule('0 */15 * * * *', async function () { 
-    console.log(await AutoTasks.GetImage('1','ise2'))
-    console.log(await AutoTasks.GetImage('2','ise2'))
-    console.log(await AutoTasks.GetImage('3','ise2'))
-     console.log(await AutoTasks.GetImage('4','ise2'))
-});
-//3
-cron.schedule("0 */15 * * * *", async function() {
-   console.log(await AutoTasks.GetImage('1','ise1'))
-   console.log(await AutoTasks.GetImage('2','ise1'))
-    console.log(await AutoTasks.GetImage('3','ise1'))
-   console.log(await AutoTasks.GetImage('4','ise1'))
-});
-
-//SPECTROGRAM PLOT
+//Images Cron
 //1
 
-cron.schedule('0 */15 * * * *', async function () { 
+cron.schedule('0 */15 * * * *', async function () {
+    await H24_e1ms1();
+    await H24_ise1();
+    await H24_ise2();
     await SP_e1ms1();
     await SP_ise1();
     await SP_ise2();
- });
- //2
- cron.schedule('0 */20 * * * *', async function () { 
-  //   console.log(AutoTasks.GetImageSp('1','ise2'))
-   //  console.log(AutoTasks.GetImageSp('2','ise2'))
-   //  console.log(AutoTasks.GetImageSp('3','ise2'))
-   //   console.log(AutoTasks.GetImageSp('4','ise2'))
- });
- //3
- cron.schedule("0 */20 * * * *", async function() {
-  //  console.log(AutoTasks.GetImageSp  ('1','ise1'))
-  //  console.log(AutoTasks.GetImageSp  ('2','ise1'))
-  //   console.log(AutoTasks.GetImageSp ('3','ise1'))
-  //  console.log(AutoTasks.GetImageSp  ('4','ise1'))
- });
+});
+async function H24_e1ms1() {
+    console.log(await AutoTasks.GetImage('1', 'e1ms1'))
+    console.log(await AutoTasks.GetImage('2', 'e1ms1'))
+    console.log(await AutoTasks.GetImage('3', 'e1ms1'))
+    console.log(await AutoTasks.GetImage('4', 'e1ms1'))
+}
+async function H24_ise2() {
+    console.log(await AutoTasks.GetImage('1', 'ise2'))
+    console.log(await AutoTasks.GetImage('2', 'ise2'))
+    console.log(await AutoTasks.GetImage('3', 'ise2'))
+    console.log(await AutoTasks.GetImage('4', 'ise2'))
+}
+async function H24_ise1() {
+    console.log(await AutoTasks.GetImage('1', 'ise1'))
+    console.log(await AutoTasks.GetImage('2', 'ise1'))
+    console.log(await AutoTasks.GetImage('3', 'ise1'))
+    console.log(await AutoTasks.GetImage('4', 'ise1'))
+}
 
-async function SP_e1ms1(){
-    console.log(await AutoTasks.GetImageSp('1','e1ms1'))
-   console.log(await AutoTasks.GetImageSp('2','e1ms1'))
-    console.log(await AutoTasks.GetImageSp('3','e1ms1'))
-    console.log(await AutoTasks.GetImageSp('4','e1ms1'))
+async function SP_e1ms1() {
+    console.log(await AutoTasks.GetImageSp('1', 'e1ms1'))
+    console.log(await AutoTasks.GetImageSp('2', 'e1ms1'))
+    console.log(await AutoTasks.GetImageSp('3', 'e1ms1'))
+    console.log(await AutoTasks.GetImageSp('4', 'e1ms1'))
 }
-async function SP_ise1(){
-    console.log(await AutoTasks.GetImageSp('1','ise1'))
-   console.log(await AutoTasks.GetImageSp('2','ise1'))
-    console.log(await AutoTasks.GetImageSp('3','ise1'))
-    console.log(await AutoTasks.GetImageSp('4','ise1'))
+async function SP_ise1() {
+    console.log(await AutoTasks.GetImageSp('1', 'ise1'))
+    console.log(await AutoTasks.GetImageSp('2', 'ise1'))
+    console.log(await AutoTasks.GetImageSp('3', 'ise1'))
+    console.log(await AutoTasks.GetImageSp('4', 'ise1'))
 }
-async function SP_ise2(){
-    console.log(await AutoTasks.GetImageSp('1','ise2'))
-   console.log(await AutoTasks.GetImageSp('2','ise2'))
-    console.log(await AutoTasks.GetImageSp('3','ise2'))
-    console.log(await AutoTasks.GetImageSp('4','ise2'))
+async function SP_ise2() {
+    console.log(await AutoTasks.GetImageSp('1', 'ise2'))
+    console.log(await AutoTasks.GetImageSp('2', 'ise2'))
+    console.log(await AutoTasks.GetImageSp('3', 'ise2'))
+    console.log(await AutoTasks.GetImageSp('4', 'ise2'))
 }
 /**
  * Server Activation
