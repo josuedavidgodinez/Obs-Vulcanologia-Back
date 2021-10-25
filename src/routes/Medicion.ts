@@ -63,7 +63,7 @@ med.get('/:tabla/LecturaInicio', function(req,  res) {
         return;
     }
     const fecha_actual = new Date();
-    const fecha_ayer = timeService.addHours(fecha_actual, -24);
+    const fecha_ayer = timeService.addHours(fecha_actual, -12); // Cambiar el tamaño de las horas respecto al tamaño del servidor donde se va a alojar.
     const fecha_compuesta_inicial = timeService.date2QDate(fecha_ayer);
     const fecha_compuesta_final = timeService.date2QDate(fecha_actual);
 
