@@ -5,12 +5,13 @@ import * as io from "./FileService";
 import { runPy } from "./pythonService";
 import * as FileS from "./FileServiceDB"
 export const generateImage = async(sensor: string,table: string, endDate: Date): Promise<string> => {
-    const startDate = timeService.addHours(endDate, -24);
+    const startDate = timeService.addHours(endDate, -13);
+    const EndDate = timeService.addHours(endDate, -12);
 
     //const fi = new Date('2021-10-01T10:02:00-06:00');
     //const ff = new Date('2021-10-01T11:02:00-06:00');
     const sd = timeService.date2QDate(startDate);
-    const ed = timeService.date2QDate(endDate);
+    const ed = timeService.date2QDate(EndDate);
 
     const imgFolder = await io.getImageFolder();
     const imgName = 'ieg' + timeService.date2number(startDate)

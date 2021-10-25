@@ -97,10 +97,14 @@ cron.schedule('0 */15 * * * *', async function () {
     await H24_e1ms1();
     await H24_ise1();
     await H24_ise2();
+});
+
+cron.schedule('0 */10 * * * *', async function () {
     await SP_e1ms1();
     await SP_ise1();
     await SP_ise2();
 });
+
 async function H24_e1ms1() {
     console.log(await AutoTasks.GetImage('1', 'e1ms1'))
     console.log(await AutoTasks.GetImage('2', 'e1ms1'))
