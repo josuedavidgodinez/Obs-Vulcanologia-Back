@@ -38,9 +38,7 @@ export async function GetImage(sensor: string, table: string) {
     });
 }
 
-export async function GetImageSp(sensor: string, table: string) {
-    let date = new Date();
-    var f_f = Time.addHours(Time.changeToUTC(date), -13);
+export async function GetImageSp(sensor: string, table: string,f_f: Date) {
    await generateImageSp(sensor, table, f_f).then(imgPath => {
         console.log('File Spectrogram created at ', imgPath);
     }).catch((err: Error) => {

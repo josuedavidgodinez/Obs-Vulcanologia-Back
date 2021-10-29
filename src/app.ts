@@ -2,6 +2,7 @@ import * as dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import * as Time from '../src/services/TimeService'
 
 dotenv.config();
 
@@ -125,22 +126,31 @@ async function H24_ise1() {
 }
 
 async function SP_e1ms1() {
-    console.log(await AutoTasks.GetImageSp('1', 'e1ms1'))
-    console.log(await AutoTasks.GetImageSp('2', 'e1ms1'))
-    console.log(await AutoTasks.GetImageSp('3', 'e1ms1'))
-    console.log(await AutoTasks.GetImageSp('4', 'e1ms1'))
+    let date = new Date();
+    var f_f = Time.addHours(Time.changeToUTC(date), -13);
+
+    console.log(await AutoTasks.GetImageSp('1', 'e1ms1',f_f))
+    console.log(await AutoTasks.GetImageSp('2', 'e1ms1',f_f))
+    console.log(await AutoTasks.GetImageSp('3', 'e1ms1',f_f))
+    console.log(await AutoTasks.GetImageSp('4', 'e1ms1',f_f))
 }
 async function SP_ise1() {
-    console.log(await AutoTasks.GetImageSp('1', 'ise1'))
-    console.log(await AutoTasks.GetImageSp('2', 'ise1'))
-    console.log(await AutoTasks.GetImageSp('3', 'ise1'))
-    console.log(await AutoTasks.GetImageSp('4', 'ise1'))
+    let date = new Date();
+    var f_f = Time.addHours(Time.changeToUTC(date), -13);
+
+    console.log(await AutoTasks.GetImageSp('1', 'ise1',f_f))
+    console.log(await AutoTasks.GetImageSp('2', 'ise1',f_f))
+    console.log(await AutoTasks.GetImageSp('3', 'ise1',f_f))
+    console.log(await AutoTasks.GetImageSp('4', 'ise1',f_f))
 }
 async function SP_ise2() {
-    console.log(await AutoTasks.GetImageSp('1', 'ise2'))
-    console.log(await AutoTasks.GetImageSp('2', 'ise2'))
-    console.log(await AutoTasks.GetImageSp('3', 'ise2'))
-    console.log(await AutoTasks.GetImageSp('4', 'ise2'))
+    let date = new Date();
+    var f_f = Time.addHours(Time.changeToUTC(date), -13);
+
+    console.log(await AutoTasks.GetImageSp('1', 'ise2',f_f ))
+    console.log(await AutoTasks.GetImageSp('2', 'ise2',f_f))
+    console.log(await AutoTasks.GetImageSp('3', 'ise2',f_f))
+    console.log(await AutoTasks.GetImageSp('4', 'ise2',f_f))
 }
 /**
  * Server Activation

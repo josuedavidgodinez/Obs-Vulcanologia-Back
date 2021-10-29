@@ -8,8 +8,14 @@ from datetime import datetime, timedelta
 from obspy import UTCDateTime, read, Trace, Stream
 
 
-imgPath = sys.argv[1]
-filePath = sys.argv[2]
+imgPath     = sys.argv[1]
+filePath    = sys.argv[2]
+StartDate   = sys.argv[3]
+EndDate     = sys.argv[4]
+Sensor      = sys.argv[5]
+Estacion    = sys.argv[6]
+
+
 
 #imgPath = '/home/ubuntu/Downloads/tempData/prueba1.png'
 #filePath = '/home/ubuntu/Downloads/tempData/prueba.txt'
@@ -26,8 +32,8 @@ if(len(miniseeds)>1):
 
 import matplotlib
 matplotlib.use('Agg')
-
-st.spectrogram(log=True, title='Espectrograma', outfile=imgPath)
+title_es = "Espectrograma - Fecha I.: "+ StartDate + " Fecha F.: "+EndDate+" Sensor: "+Sensor+" Estacion: "+Estacion
+st.spectrogram(log=True, title=title_es, outfile=imgPath)
 
 print(imgPath)
 os.remove(filePath)

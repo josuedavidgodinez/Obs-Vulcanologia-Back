@@ -21,7 +21,7 @@ export const generateImage = async(sensor: string,table: string, endDate: Date):
         console.log(text);
     const tempFile = await io.genTempFile(text);
     await io.writeFile(tempFile,text,false);
-    const parametros = [ imgFolder + imgName, tempFile ]
+    const parametros = [ imgFolder + imgName, tempFile ,sd,ed,sensor,table]
     const imgPath = await runPy('CreateSpgImg', parametros);
         console.log(imgPath)
 
