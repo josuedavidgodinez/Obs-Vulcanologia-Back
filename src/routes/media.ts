@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import { listaImagenes, listaTablas } from "../database/listaTablas";
-import { listaTipos } from "../models/listaTipoMedia";
-import { getImgPath } from "../services/MediaService";
+import { getImgPath, getImgPath2, getImgPathList } from "../services/MediaService";
 import * as timeService from "../services/TimeService";
 import { statusCode } from "../models/statusCode";
 import { getLastPhoto } from '../services/GetPhoto';
@@ -15,11 +14,11 @@ const badRequestObject = (message: string) => {
     };
 }
 
-// host/media/estacion/sensor/tipo?fhi=_fechaHoraInicio&fhf=_fechaHoraFin
-media.get('/:estacion/:sensor/:tipo', (req,  res) => {    
+// host/media/24h/estacion/sensor?fhi=_fechaHoraInicio&fhf=_fechaHoraFin
+media.get('/24h/:estacion/:sensor', (req,  res) => {    
     const estacion: string = listaImagenes[req.params.estacion];
     const sensor: number = +req.params.sensor;
-    const tipo: string = listaTipos[req.params.tipo];
+    const tipo: string = "24Hrs";
     if(!estacion) {
         res.status(statusCode.badRequest)
         .json(badRequestObject("Tabla Invalida"));
@@ -35,18 +34,52 @@ media.get('/:estacion/:sensor/:tipo', (req,  res) => {
         .json(badRequestObject("Sensor Invalido"));
         return;
     }
-    if(!tipo) {
+    const url_query: any = req.query;
+    const fecha_i = timeService.validateDTurlFormat(url_query.fhi);
+    const fecha_f = timeService.validateDTurlFormat(url_query.fhf);
+    getImgPath(estacion, sensor, tipo, fecha_i, fecha_f).then(path => {
+        res.status(statusCode.ok)
+        .sendFile(path);
+    }).catch((err: Error) => {
+        res.status(statusCode.conflict)
+        .json({
+            status: statusCode.conflict,
+            name: err.name,
+            message: err.message
+        });
+    });
+});
+
+// host/media/eg/estacion/sensor?fhi=_fechaHoraInicio&fhf=_fechaHoraFin
+media.get('/eg/:estacion/:sensor', (req,  res) => {    
+    const estacion: string = listaImagenes[req.params.estacion];
+    const sensor: number = +req.params.sensor;
+    const tipo: string = 'eg';
+    if(!estacion) {
         res.status(statusCode.badRequest)
-        .json(badRequestObject("Tipo Invalido"));
+        .json(badRequestObject("Tabla Invalida"));
+        return;
+    }
+    if(!Number.isInteger(sensor)) {
+        res.status(statusCode.badRequest)
+        .json(badRequestObject("Sensor Invalido"));
+        return;
+    }
+    if(sensor < 1 && sensor > 4){
+        res.status(statusCode.badRequest)
+        .json(badRequestObject("Sensor Invalido"));
         return;
     }
     const url_query: any = req.query;
     const fecha_i = timeService.validateDTurlFormat(url_query.fhi);
     const fecha_f = timeService.validateDTurlFormat(url_query.fhf);
-    
-    getImgPath(estacion, sensor, tipo, fecha_i, fecha_f).then(path => {
+    getImgPathList(estacion, sensor, tipo, fecha_i, fecha_f).then(paths => {
         res.status(statusCode.ok)
-        .sendFile(path);
+        .json({
+            status: statusCode.ok,
+            count: paths.length,
+            list: paths
+        });
     }).catch((err: Error) => {
         res.status(statusCode.conflict)
         .json({
@@ -70,5 +103,20 @@ media.get('/lastPhoto', (req, res) => {
         });
     });
 })
+
+media.get('/graphs/:imgName', (req, res) => {
+    const imgName: string = req.params.imgName;
+    getImgPath2(imgName).then(path => {
+        res.status(statusCode.ok)
+        .sendFile(path);
+    }).catch((err: Error) => {
+        res.status(statusCode.conflict)
+        .json({
+            status: statusCode.conflict,
+            name: err.name,
+            message: err.message
+        });
+    });
+});
 
 export default media;

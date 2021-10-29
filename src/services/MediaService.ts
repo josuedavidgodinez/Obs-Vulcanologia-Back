@@ -1,7 +1,17 @@
 import pool from "../database/db";
 import { listaTablas } from "../database/listaTablas";
 import { columnasImagenes } from "../models/listaAtributos";
-import * as io from "../services/FileService";
+
+const getImgRef = (row: any) => {
+    const path = row[columnasImagenes.path];
+    const i = path.lastIndexOf('/');
+    const j = path.lastIndexOf('\\');
+    const k = i < 0?j:i;
+    const imgName: string = path.substring(k + 1);
+    const fechaInicial: string = row[columnasImagenes.fechaInicial];
+    const fechaFinal: string = row[columnasImagenes.fechaFinal];
+    return{ imgName, fechaInicial, fechaFinal };
+}
 
 export const getImgPath = async (
     estacion: string,
@@ -10,9 +20,6 @@ export const getImgPath = async (
     fechaInicio: string | null,
     fechaFin: string | null
 ): Promise<string> => {
-    //const imgPath = io.getImgPrueba();
-    //return imgPath;
-
     let query = 'SELECT '
     query += columnasImagenes.path
     query += ' FROM ' + listaTablas['imagenes'];
@@ -28,7 +35,47 @@ export const getImgPath = async (
         query += ' AND ' + columnasImagenes.fechaFinal + ' <= ' + fechaFin;
     }
     query += ' ORDER BY ' + columnasImagenes.fechaRegisto +' DESC';
-    console.log(query)
+    const query_result = await pool.query(query);
+    if (query_result.rows.length == 0) throw new Error("Image Not Found");
+    return query_result.rows[0][columnasImagenes.path];
+}
+
+export const getImgPathList = async (
+    estacion: string,
+    sensor: number,
+    tipo: string,
+    fechaInicio: string | null,
+    fechaFin: string | null
+): Promise<any[]> => {
+    let query = 'SELECT '
+    query += columnasImagenes.path
+    query += ',' + columnasImagenes.fechaInicial,
+    query += ',' + columnasImagenes.fechaFinal
+    query += ' FROM ' + listaTablas['imagenes'];
+    query += ' WHERE ' + columnasImagenes.estacion + ' = ' + "'" +estacion+"'";
+    query += ' AND ' + columnasImagenes.sensor + ' = ' + "'" +sensor+"'";
+    query += ' AND ' + columnasImagenes.tipo + ' = ' + "'" +tipo+"'";
+    if (fechaInicio){
+        fechaInicio = "'" + fechaInicio + "'";
+        query += ' AND ' + columnasImagenes.fechaInicial + ' >= ' + fechaInicio;
+    }
+    if (fechaFin){
+        fechaFin = "'" + fechaFin + "'";
+        query += ' AND ' + columnasImagenes.fechaFinal + ' <= ' + fechaFin;
+    }
+    query += ' ORDER BY ' + columnasImagenes.fechaRegisto +' DESC';
+    const query_result = await pool.query(query);
+    if (query_result.rows.length == 0) return [];
+    return query_result.rows.map(r => getImgRef(r));
+}
+
+export const getImgPath2 = async (imgName: string): Promise<string> => {
+    const comilla = "'";
+    const wparam = comilla + "%" + imgName + comilla;
+    let query = 'SELECT '
+    query += columnasImagenes.path
+    query += ' FROM ' + listaTablas['imagenes'];
+    query += ' WHERE ' + columnasImagenes.path + ' LIKE ' + wparam;
     const query_result = await pool.query(query);
     if (query_result.rows.length == 0) throw new Error("Image Not Found");
     return query_result.rows[0][columnasImagenes.path];
