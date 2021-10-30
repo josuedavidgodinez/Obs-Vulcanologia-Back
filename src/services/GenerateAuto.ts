@@ -28,9 +28,7 @@ export async function GenerateMSeed(table: string) {
 }
 
 
-export async function GetImage(sensor: string, table: string) {
-    let date = new Date();
-    var f_f = Time.addHours(Time.changeToUTC(date), -13);
+export async function GetImage(sensor: string, table: string,f_f: Date) {
   await  generateImage(sensor, table, f_f).then(imgPath => {
         console.log('File created at ', imgPath);
     }).catch((err: Error) => {

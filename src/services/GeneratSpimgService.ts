@@ -6,7 +6,9 @@ import { runPy } from "./pythonService";
 import * as FileS from "./FileServiceDB"
 export const generateImage = async(sensor: string,table: string, endDate: Date): Promise<string> => {
     const startDate = timeService.addHours(endDate, -13);
-    const EndDate = timeService.addHours(endDate, -12);
+    const EndDate = timeService.addHours(endDate, -12.83333);
+    console.log(startDate)
+    console.log(EndDate)
 
     //const fi = new Date('2021-10-01T10:02:00-06:00');
     //const ff = new Date('2021-10-01T11:02:00-06:00');

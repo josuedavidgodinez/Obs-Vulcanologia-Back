@@ -95,62 +95,62 @@ cron.schedule('0 */1 * * *', async function () {
 //1
 
 cron.schedule('0 */15 * * * *', async function () {
-    await H24_e1ms1();
-    await H24_ise1();
-    await H24_ise2();
+    let date = new Date();
+    const f_f = Time.addHours(Time.changeToUTC(date), -13);
+
+    await H24_e1ms1(f_f);
+    await H24_ise1(f_f);
+    await H24_ise2(f_f);
 });
 
 cron.schedule('0 */10 * * * *', async function () {
-    await SP_e1ms1();
-    await SP_ise1();
-    await SP_ise2();
+    let date = new Date();
+    const f_f = Time.addHours(Time.changeToUTC(date), -13);
+
+    await SP_e1ms1(f_f);
+    await SP_ise1(f_f);
+    await SP_ise2(f_f);
 });
 
-async function H24_e1ms1() {
-    console.log(await AutoTasks.GetImage('1', 'e1ms1'))
-    console.log(await AutoTasks.GetImage('2', 'e1ms1'))
-    console.log(await AutoTasks.GetImage('3', 'e1ms1'))
-    console.log(await AutoTasks.GetImage('4', 'e1ms1'))
+async function H24_e1ms1(fecha_final:Date) {
+    console.log(await AutoTasks.GetImage('1', 'e1ms1',fecha_final))
+    console.log(await AutoTasks.GetImage('2', 'e1ms1',fecha_final))
+    console.log(await AutoTasks.GetImage('3', 'e1ms1',fecha_final))
+    console.log(await AutoTasks.GetImage('4', 'e1ms1',fecha_final))
 }
-async function H24_ise2() {
-    console.log(await AutoTasks.GetImage('1', 'ise2'))
-    console.log(await AutoTasks.GetImage('2', 'ise2'))
-    console.log(await AutoTasks.GetImage('3', 'ise2'))
-    console.log(await AutoTasks.GetImage('4', 'ise2'))
+async function H24_ise2(fecha_final:Date) {
+    console.log(await AutoTasks.GetImage('1', 'ise2',fecha_final))
+    console.log(await AutoTasks.GetImage('2', 'ise2',fecha_final))
+    console.log(await AutoTasks.GetImage('3', 'ise2',fecha_final))
+    console.log(await AutoTasks.GetImage('4', 'ise2',fecha_final))
 }
-async function H24_ise1() {
-    console.log(await AutoTasks.GetImage('1', 'ise1'))
-    console.log(await AutoTasks.GetImage('2', 'ise1'))
-    console.log(await AutoTasks.GetImage('3', 'ise1'))
-    console.log(await AutoTasks.GetImage('4', 'ise1'))
+async function H24_ise1(fecha_final:Date) {
+    console.log(await AutoTasks.GetImage('1', 'ise1',fecha_final))
+    console.log(await AutoTasks.GetImage('2', 'ise1',fecha_final))
+    console.log(await AutoTasks.GetImage('3', 'ise1',fecha_final))
+    console.log(await AutoTasks.GetImage('4', 'ise1',fecha_final))
 }
 
-async function SP_e1ms1() {
-    let date = new Date();
-    var f_f = Time.addHours(Time.changeToUTC(date), -13);
-
-    console.log(await AutoTasks.GetImageSp('1', 'e1ms1',f_f))
-    console.log(await AutoTasks.GetImageSp('2', 'e1ms1',f_f))
-    console.log(await AutoTasks.GetImageSp('3', 'e1ms1',f_f))
-    console.log(await AutoTasks.GetImageSp('4', 'e1ms1',f_f))
+async function SP_e1ms1(fecha_final:Date) {
+    
+    console.log(await AutoTasks.GetImageSp('1', 'e1ms1',fecha_final))
+    console.log(await AutoTasks.GetImageSp('2', 'e1ms1',fecha_final))
+    console.log(await AutoTasks.GetImageSp('3', 'e1ms1',fecha_final))
+    console.log(await AutoTasks.GetImageSp('4', 'e1ms1',fecha_final))
 }
-async function SP_ise1() {
-    let date = new Date();
-    var f_f = Time.addHours(Time.changeToUTC(date), -13);
-
-    console.log(await AutoTasks.GetImageSp('1', 'ise1',f_f))
-    console.log(await AutoTasks.GetImageSp('2', 'ise1',f_f))
-    console.log(await AutoTasks.GetImageSp('3', 'ise1',f_f))
-    console.log(await AutoTasks.GetImageSp('4', 'ise1',f_f))
+async function SP_ise1(fecha_final:Date) {
+    
+    console.log(await AutoTasks.GetImageSp('1', 'ise1',fecha_final))
+    console.log(await AutoTasks.GetImageSp('2', 'ise1',fecha_final))
+    console.log(await AutoTasks.GetImageSp('3', 'ise1',fecha_final))
+    console.log(await AutoTasks.GetImageSp('4', 'ise1',fecha_final))
 }
-async function SP_ise2() {
-    let date = new Date();
-    var f_f = Time.addHours(Time.changeToUTC(date), -13);
-
-    console.log(await AutoTasks.GetImageSp('1', 'ise2',f_f ))
-    console.log(await AutoTasks.GetImageSp('2', 'ise2',f_f))
-    console.log(await AutoTasks.GetImageSp('3', 'ise2',f_f))
-    console.log(await AutoTasks.GetImageSp('4', 'ise2',f_f))
+async function SP_ise2(fecha_final:Date) {
+    
+    console.log(await AutoTasks.GetImageSp('1', 'ise2',fecha_final ))
+    console.log(await AutoTasks.GetImageSp('2', 'ise2',fecha_final))
+    console.log(await AutoTasks.GetImageSp('3', 'ise2',fecha_final))
+    console.log(await AutoTasks.GetImageSp('4', 'ise2',fecha_final))
 }
 /**
  * Server Activation
