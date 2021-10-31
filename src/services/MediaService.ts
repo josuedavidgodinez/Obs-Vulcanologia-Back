@@ -55,15 +55,15 @@ export const getImgPathList = async (
     query += ' WHERE ' + columnasImagenes.estacion + ' = ' + "'" +estacion+"'";
     query += ' AND ' + columnasImagenes.sensor + ' = ' + "'" +sensor+"'";
     query += ' AND ' + columnasImagenes.tipo + ' = ' + "'" +tipo+"'";
-    if (fechaInicio){
+    if(fechaInicio && fechaFin){
         fechaInicio = "'" + fechaInicio + "'";
         query += ' AND ' + columnasImagenes.fechaInicial + ' >= ' + fechaInicio;
-    }
-    if (fechaFin){
         fechaFin = "'" + fechaFin + "'";
         query += ' AND ' + columnasImagenes.fechaFinal + ' <= ' + fechaFin;
-    }
-    query += ' ORDER BY ' + columnasImagenes.fechaRegisto +' DESC';
+        query += ' ORDER BY ' + columnasImagenes.fechaRegisto +' DESC';
+    }else if (!fechaInicio && !fechaFin)
+        query += ' ORDER BY ' + columnasImagenes.fechaRegisto +' DESC LIMIT 10';
+    else throw new Error("Invalid count of parameters");
     const query_result = await pool.query(query);
     if (query_result.rows.length == 0) return [];
     return query_result.rows.map(r => getImgRef(r));
