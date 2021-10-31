@@ -28,11 +28,11 @@ export const getImgPath = async (
     query += ' AND ' + columnasImagenes.tipo + ' = ' + "'" +tipo+"'";
     if (fechaInicio){
         fechaInicio = "'" + fechaInicio + "'";
-        query += ' AND ' + columnasImagenes.fechaInicial + '- \'1s\'::INTERVAL >= ' + fechaInicio;
+        query += ' AND ' + columnasImagenes.fechaInicial +' >= ' + fechaInicio + '::timestamp - \'1s\'::INTERVAL';
     }
     if (fechaFin){
         fechaFin = "'" + fechaFin + "'";
-        query += ' AND ' + columnasImagenes.fechaFinal + '+ \'1s\'::INTERVAL <= ' + fechaFin;
+        query += ' AND ' + columnasImagenes.fechaFinal +' <= ' + fechaFin + '::timestamp + \'1s\'::INTERVAL';
     }
     query += ' ORDER BY ' + columnasImagenes.fechaRegisto +' DESC';
     const query_result = await pool.query(query);

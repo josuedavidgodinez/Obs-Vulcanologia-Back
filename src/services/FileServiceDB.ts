@@ -10,11 +10,11 @@ export const ReadMiniSeeds = async ( estacion: string,sensor: string,fechaInicio
     let query = 'SELECT '
     query += columnasminiSeeds.path 
     query += ' FROM archivos_seed2' 
-    query += ' WHERE (' + columnasminiSeeds.fechaInicial + '- \'1s\'::INTERVAL >= ' + fechaInicio;
-    query += ' AND ' + columnasminiSeeds.fechaFinal + '+ \'1s\'::INTERVAL <= ' + fechaFin + ')';
+    query += ' WHERE (' + columnasminiSeeds.fechaInicial + ' >= ' + fechaInicio + '::timestamp - \'1s\'::INTERVAL';
+    query += ' AND ' + columnasminiSeeds.fechaFinal +' <= ' + fechaFin + '::timestamp + \'1s\'::INTERVAL ' + ')';
     query += ' AND ' + columnasminiSeeds.estacion + " = '" +estacion+"'";
     query += ' AND ' + columnasminiSeeds.sensor + " = '" +sensor+"'";
-
+    console.log(query);
     const query_result = await pool.query(query);
     
     const seeds =  query_result.rows.map(
