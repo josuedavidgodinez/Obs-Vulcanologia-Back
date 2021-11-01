@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "ts-node-dev --respawn --pretty --transpile-only src/app.ts",
-    "build": "tsc --project ./"
+    "build": "tsc --project ./",
+    "start": "node ./build/src/app.js"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
