@@ -32,7 +32,7 @@ if(len(miniseeds)>1):
 
 import matplotlib
 matplotlib.use('Agg')
-title_es = "Espectrograma - Fecha I.: "+ StartDate + " Fecha F.: "+EndDate+" Sensor: "+Sensor+" Estacion: "+Estacion
+title_es = "Espectrograma - Fecha I.: "+ StartDate + " Fecha F.: "+EndDate+" \n Sensor: "+Sensor+" Estacion: "+Estacion
 st.spectrogram(log=True, title=title_es, outfile=imgPath)
 
 print(imgPath)
