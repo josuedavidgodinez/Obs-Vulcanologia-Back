@@ -45,7 +45,12 @@ const getDateParts = (date: Date): string[] => {
     return initStr;
 }
 
-export function validateDTurlFormat(datetime:string): string | null{
+export enum operacion {
+    suma = 1,
+    resta = -1
+}
+
+export function validateDTurlFormat(datetime:string, signo: operacion): string | null{
     if (!datetime) return null;
     if (datetime.length != 12) return null;
     if (!datetime.match(/^(\d{12})/)) return null;
@@ -56,7 +61,8 @@ export function validateDTurlFormat(datetime:string): string | null{
     newDTS += ":" + datetime.substr(10);
     try{
         let d = new Date(newDTS);
-        return newDTS;
+        d = addMiliseconds(d, signo*60*1000);
+        return date2QDate(d);
     }catch{
         return null;
     }
