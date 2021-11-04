@@ -18,8 +18,8 @@ med.get('/:tabla', function(req,  res) {
     }
     const url_query: any = req.query;
     // fechaHora = yyyyMMddHHmm
-    const fecha_i = timeService.validateDTurlFormat(url_query.fhi);
-    const fecha_f = timeService.validateDTurlFormat(url_query.fhf);
+    const fecha_i = timeService.validateDTurlFormat(url_query.fhi, timeService.operacion.resta);
+    const fecha_f = timeService.validateDTurlFormat(url_query.fhf, timeService.operacion.suma);
     if (!fecha_i) {
         res.status(statusCode.badRequest)
         .json({
