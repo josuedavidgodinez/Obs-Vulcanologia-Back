@@ -27,7 +27,7 @@ export const getImgPath = async (
     query += ' AND ' + columnasImagenes.sensor + ' = ' + "'" +sensor+"'";
     query += ' AND ' + columnasImagenes.tipo + ' = ' + "'" +tipo+"'";
     query += ' AND ' + columnasImagenes.fechaInicial + ' <= ' + fechaInicio;
-    query += ' AND ' + fechaInicio + ' >= ' + columnasImagenes.fechaFinal;
+    query += ' AND ' + fechaInicio + ' <= ' + columnasImagenes.fechaFinal;
     query += ' ORDER BY ' + columnasImagenes.fechaFinal +' DESC';
     query += ' LIMIT 1';
     const query_result = await pool.query(query);
