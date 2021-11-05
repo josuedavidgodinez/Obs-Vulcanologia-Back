@@ -49,13 +49,18 @@ const app = express();
  *  App Configuration
 */
 
+const myCors = cors({
+    origin: '*',
+    methods: ['GET','POST']
+})
+
 app.use(helmet());
-app.use(cors());
+app.use(myCors);
 app.use(express.json());
 
-app.use('/med', medicion); // site/med/
-app.use('/dayplot', dayplot);// site/dateplot
-app.use('/media', media); // site/media
+app.use('/med', myCors, medicion); // site/med/
+app.use('/dayplot', myCors, dayplot);// site/dateplot
+app.use('/media', myCors, media); // site/media
 
 app.get('/', (req, res) => {
     res.status(statusCode.ok)
