@@ -51,15 +51,20 @@ media.get('/24h/:estacion/:sensor', (req,  res) => {
 });
 
 // host/media/eg/estacion/sensor?fhi=_fechaHoraInicio&fhf=_fechaHoraFin
+//ruta en API para obtener imagenes de espectrograma en ciertas
+//FECHAS , SENSOR Y ESTACION
 media.get('/eg/:estacion/:sensor', (req,  res) => {    
+    //obtenemos paramtros del request
     const estacion: string = listaImagenes[req.params.estacion];
     const sensor: number = +req.params.sensor;
     const tipo: string = 'eg';
+    //validamos que sea una estacion correcta
     if(!estacion) {
         res.status(statusCode.badRequest)
         .json(badRequestObject("Tabla Invalida"));
         return;
     }
+    //validamos el sensor
     if(!Number.isInteger(sensor)) {
         res.status(statusCode.badRequest)
         .json(badRequestObject("Sensor Invalido"));
@@ -70,9 +75,11 @@ media.get('/eg/:estacion/:sensor', (req,  res) => {
         .json(badRequestObject("Sensor Invalido"));
         return;
     }
+    //damos formato adecuado a parametros de fecha
     const url_query: any = req.query;
     const fecha_i = timeService.validateDTurlFormat(url_query.fhi);
     const fecha_f = timeService.validateDTurlFormat(url_query.fhf);
+    //obtenemos imagenes a traves del servicio 
     getImgPathList(estacion, sensor, tipo, fecha_i, fecha_f).then(paths => {
         res.status(statusCode.ok)
         .json({

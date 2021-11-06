@@ -40,6 +40,7 @@ export const getImgPath = async (
     return query_result.rows[0][columnasImagenes.path];
 }
 
+//Obtener de base de datos las rutas de las imagenes de los plot realizados en python
 export const getImgPathList = async (
     estacion: string,
     sensor: number,
@@ -47,6 +48,7 @@ export const getImgPathList = async (
     fechaInicio: string | null,
     fechaFin: string | null
 ): Promise<any[]> => {
+    //Consulta de las rutas en BD dependiendo de la estacion y sensor
     let query = 'SELECT '
     query += columnasImagenes.path
     query += ',' + columnasImagenes.fechaInicial,
@@ -64,6 +66,7 @@ export const getImgPathList = async (
     }else if (!fechaInicio && !fechaFin)
         query += ' ORDER BY ' + columnasImagenes.fechaRegisto +' DESC LIMIT 10';
     else throw new Error("Invalid count of parameters");
+    // se espera resultado de la consulta
     const query_result = await pool.query(query);
     if (query_result.rows.length == 0) return [];
     return query_result.rows.map(r => getImgRef(r));

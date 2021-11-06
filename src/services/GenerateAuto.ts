@@ -27,7 +27,8 @@ export async function GenerateMSeed(table: string) {
     });
 }
 
-
+//Metodo que se ejecuta automaticamente cada cierto tiempo a partir del Cron
+//Genera los plot del espectrograma
 export async function GetImage(sensor: string, table: string,f_f: Date) {
   await  generateImage(sensor, table, f_f).then(imgPath => {
         console.log('File created at ', imgPath);
@@ -35,6 +36,7 @@ export async function GetImage(sensor: string, table: string,f_f: Date) {
         console.log(err.message);
     });
 }
+
 
 export async function GetImageSp(sensor: string, table: string,f_f: Date) {
    await generateImageSp(sensor, table, f_f).then(imgPath => {
