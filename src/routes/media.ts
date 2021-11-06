@@ -14,7 +14,7 @@ const badRequestObject = (message: string) => {
     };
 }
 
-// host/media/24h/estacion/sensor?fhi=_fechaHoraInicio&fhf=_fechaHoraFin
+// host/media/24h/estacion/sensor?fh=_fechaHora
 media.get('/24h/:estacion/:sensor', (req,  res) => {    
     const estacion: string = listaImagenes[req.params.estacion];
     const sensor: number = +req.params.sensor;
@@ -35,9 +35,8 @@ media.get('/24h/:estacion/:sensor', (req,  res) => {
         return;
     }
     const url_query: any = req.query;
-    const fecha_i = timeService.validateDTurlFormat(url_query.fhi);
-    const fecha_f = timeService.validateDTurlFormat(url_query.fhf);
-    getImgPath(estacion, sensor, tipo, fecha_i, fecha_f).then(path => {
+    const fecha = timeService.validateDTurlFormat(url_query.fh, timeService.operacion.suma);
+    getImgPath(estacion, sensor, tipo, fecha).then(path => {
         res.status(statusCode.ok)
         .sendFile(path);
     }).catch((err: Error) => {
@@ -77,9 +76,8 @@ media.get('/eg/:estacion/:sensor', (req,  res) => {
     }
     //damos formato adecuado a parametros de fecha
     const url_query: any = req.query;
-    const fecha_i = timeService.validateDTurlFormat(url_query.fhi);
-    const fecha_f = timeService.validateDTurlFormat(url_query.fhf);
-    //obtenemos imagenes a traves del servicio 
+    const fecha_i = timeService.validateDTurlFormat(url_query.fhi, timeService.operacion.resta);
+    const fecha_f = timeService.validateDTurlFormat(url_query.fhf, timeService.operacion.suma);
     getImgPathList(estacion, sensor, tipo, fecha_i, fecha_f).then(paths => {
         res.status(statusCode.ok)
         .json({

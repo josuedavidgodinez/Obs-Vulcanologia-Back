@@ -17,24 +17,19 @@ export const getImgPath = async (
     estacion: string,
     sensor: number,
     tipo: string,
-    fechaInicio: string | null,
-    fechaFin: string | null
+    fechaInicio: string | null
 ): Promise<string> => {
+    fechaInicio = "'" + fechaInicio + "'";
     let query = 'SELECT '
     query += columnasImagenes.path
     query += ' FROM ' + listaTablas['imagenes'];
     query += ' WHERE ' + columnasImagenes.estacion + ' = ' + "'" +estacion+"'";
     query += ' AND ' + columnasImagenes.sensor + ' = ' + "'" +sensor+"'";
     query += ' AND ' + columnasImagenes.tipo + ' = ' + "'" +tipo+"'";
-    if (fechaInicio){
-        fechaInicio = "'" + fechaInicio + "'";
-        query += ' AND ' + columnasImagenes.fechaInicial +' >= ' + fechaInicio + '::timestamp - \'1s\'::INTERVAL';
-    }
-    if (fechaFin){
-        fechaFin = "'" + fechaFin + "'";
-        query += ' AND ' + columnasImagenes.fechaFinal +' <= ' + fechaFin + '::timestamp + \'1s\'::INTERVAL';
-    }
-    query += ' ORDER BY ' + columnasImagenes.fechaRegisto +' DESC';
+    query += ' AND ' + columnasImagenes.fechaInicial + ' <= ' + fechaInicio;
+    query += ' AND ' + fechaInicio + ' <= ' + columnasImagenes.fechaFinal;
+    query += ' ORDER BY ' + columnasImagenes.fechaFinal +' DESC';
+    query += ' LIMIT 1';
     const query_result = await pool.query(query);
     if (query_result.rows.length == 0) throw new Error("Image Not Found");
     return query_result.rows[0][columnasImagenes.path];

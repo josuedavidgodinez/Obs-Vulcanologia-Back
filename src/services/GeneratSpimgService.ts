@@ -13,9 +13,6 @@ export const generateImage = async(sensor: string,table: string, endDate: Date):
     const EndDate = timeService.addHours(endDate, -12.83333);
     console.log(startDate)
     console.log(EndDate)
-    //const fi = new Date('2021-10-01T10:02:00-06:00');
-    //const ff = new Date('2021-10-01T11:02:00-06:00');
-    //se convierte la fecha a un formato adecuado para python con el timeService
     const sd = timeService.date2QDate(startDate);
     const ed = timeService.date2QDate(EndDate);
 
