@@ -72,23 +72,36 @@ app.get('/', (req, res) => {
 
 
 /**
- * Tareas automáticas
- * 1er * = minutos
- * 2do * = horas
- * 3er * = dia del mes
- * 4to * = mes
- * 5to * = dia de la semana
+ * Tareas automáticas con la librería cron 
+ * Significado de cada "*" de izquiera a derecha
+     1er * = minutos
+     2do * = horas
+     3er * = dia del mes
+     4to * = mes
+     5to * = dia de la semana
  */
-
+     
 //1
+/** 
+ * Método que ejecuta la tarea de crear un mseed de la estación ise1 cada hora en punto.
+ * para una hora en específico basta con poner la hora en la posición correcta.
+*/
 cron.schedule('0 */1 * * *', async function () {
     console.log(AutoTasks.GenerateMSeed('ise1'))
 });
 //2
+/** 
+ * Método que ejecuta la tarea de crear un mseed de la estación ise2 cada hora en punto.
+ * para una hora en específico basta con poner la hora en la posición correcta.
+*/
 cron.schedule('0 */1 * * *', async function () {
     console.log(AutoTasks.GenerateMSeed('ise2'))
 });
 //3
+/** 
+ * Método que ejecuta la tarea de crear un mseed de la estación e1ms1 cada hora en punto.
+ * para una hora en específico basta con poner la hora en la posición correcta.
+*/
 cron.schedule('0 */1 * * *', async function () {
     console.log(AutoTasks.GenerateMSeed('e1ms1'))
 });
@@ -96,11 +109,17 @@ cron.schedule('0 */1 * * *', async function () {
 
 //Images Cron
 //1
-
+/** 
+ * Método que ejecuta la tarea de crear una imagen cada 15 minutos.
+ * para una hora en específico basta con poner la hora en la posición correcta.
+*/
 cron.schedule('0 */15 * * * *', async function () {
     let date = new Date();
-    const f_f = Time.addHours(Time.changeToUTC(date), -13);
+    const f_f = Time.addHours(Time.changeToUTC(date), -13); //Obtener como fecha final 13hrs atrás por un tema de delay en los archivos mseed
+                                                            //Si necesita cambiar la hora de delay, únicamente indicar la cantidad de tiempo en hrs
 
+    //Ejecuciones asincronas para llevar un orden en las gráficas
+    //Misma hora para los 3
     await H24_e1ms1(f_f);
     await H24_ise1(f_f);
     await H24_ise2(f_f);
@@ -108,32 +127,51 @@ cron.schedule('0 */15 * * * *', async function () {
 
 cron.schedule('0 */10 * * * *', async function () {
     let date = new Date();
-    const f_f = Time.addHours(Time.changeToUTC(date), -13);
+    const f_f = Time.addHours(Time.changeToUTC(date), -13); //Obtener como fecha final 13hrs atrás por un tema de delay en los archivos mseed
+    //Si necesita cambiar la hora de delay, únicamente indicar la cantidad de tiempo en hrs
+
+    //Ejecuciones asincronas para llevar un orden en las gráficas
+    //Misma hora para los 3
 
     await SP_e1ms1(f_f);
     await SP_ise1(f_f);
     await SP_ise2(f_f);
 });
 
+/**
+ * Método para generar imagenes de e1ms1 4 sensores
+ * @param fecha_final Fecha requerida para el delay de tiempo, y restar 24 Hrs a partir de la fecha indicada.
+ */
 async function H24_e1ms1(fecha_final:Date) {
     console.log(await AutoTasks.GetImage('1', 'e1ms1',fecha_final))
     console.log(await AutoTasks.GetImage('2', 'e1ms1',fecha_final))
     console.log(await AutoTasks.GetImage('3', 'e1ms1',fecha_final))
     console.log(await AutoTasks.GetImage('4', 'e1ms1',fecha_final))
 }
+/**
+ * Método para generar imagenes de ise2 4 sensores
+ * @param fecha_final Fecha requerida para el delay de tiempo, y restar 24 Hrs a partir de la fecha indicada.
+ */
 async function H24_ise2(fecha_final:Date) {
     console.log(await AutoTasks.GetImage('1', 'ise2',fecha_final))
     console.log(await AutoTasks.GetImage('2', 'ise2',fecha_final))
     console.log(await AutoTasks.GetImage('3', 'ise2',fecha_final))
     console.log(await AutoTasks.GetImage('4', 'ise2',fecha_final))
 }
+/**
+ * Método para generar imagenes de ise1 4 sensores
+ * @param fecha_final Fecha requerida para el delay de tiempo, y restar 24 Hrs a partir de la fecha indicada.
+ */
 async function H24_ise1(fecha_final:Date) {
     console.log(await AutoTasks.GetImage('1', 'ise1',fecha_final))
     console.log(await AutoTasks.GetImage('2', 'ise1',fecha_final))
     console.log(await AutoTasks.GetImage('3', 'ise1',fecha_final))
     console.log(await AutoTasks.GetImage('4', 'ise1',fecha_final))
 }
-
+/**
+ * Método para generar imagenes de ise1 4 sensores
+ * @param fecha_final Fecha requerida para el delay de tiempo, y obtener 10 minutos atrás a partir de la fecha indicada.
+ */
 async function SP_e1ms1(fecha_final:Date) {
     
     console.log(await AutoTasks.GetImageSp('1', 'e1ms1',fecha_final))
@@ -141,6 +179,10 @@ async function SP_e1ms1(fecha_final:Date) {
     console.log(await AutoTasks.GetImageSp('3', 'e1ms1',fecha_final))
     console.log(await AutoTasks.GetImageSp('4', 'e1ms1',fecha_final))
 }
+/**
+ * Método para generar imagenes de ise1 4 sensores
+ * @param fecha_final Fecha requerida para el delay de tiempo, y obtener 10 minutos atrás a partir de la fecha indicada.
+ */
 async function SP_ise1(fecha_final:Date) {
     
     console.log(await AutoTasks.GetImageSp('1', 'ise1',fecha_final))
@@ -148,6 +190,10 @@ async function SP_ise1(fecha_final:Date) {
     console.log(await AutoTasks.GetImageSp('3', 'ise1',fecha_final))
     console.log(await AutoTasks.GetImageSp('4', 'ise1',fecha_final))
 }
+/**
+ * Método para generar imagenes de ise1 4 sensores
+ * @param fecha_final Fecha requerida para el delay de tiempo, y obtener 10 minutos atrás a partir de la fecha indicada.
+ */
 async function SP_ise2(fecha_final:Date) {
     
     console.log(await AutoTasks.GetImageSp('1', 'ise2',fecha_final ))
