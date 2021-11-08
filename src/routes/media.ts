@@ -98,7 +98,10 @@ media.get('/eg/:estacion/:sensor', (req,  res) => {
 media.get('/lastPhoto', (req, res) => {
     getLastPhoto().then(path => {
         res.status(statusCode.ok)
-        .sendFile(path);
+        .json({
+            status: statusCode.ok,
+            ImgUrl: path,
+        });
     }).catch((err: Error) => {
         res.status(statusCode.conflict)
         .json({
@@ -107,7 +110,7 @@ media.get('/lastPhoto', (req, res) => {
             message: err.message
         });
     });
-})
+});
 
 media.get('/graphs/:imgName', (req, res) => {
     const imgName: string = req.params.imgName;
