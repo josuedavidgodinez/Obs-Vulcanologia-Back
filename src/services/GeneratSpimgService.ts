@@ -6,7 +6,14 @@ import { runPy } from "./pythonService";
 import * as FileS from "./FileServiceDB"
 
 
-//Se generan las imagenes de Espectrograma a partir de los miniseed almacenados
+/**
+ * Funcion para generar las imagenes de Espectrograma a partir de los miniseed almacenados
+ * @param sensor Sensor del cual se quiere obtener imagen
+ * @param table Estacion de la cual se quiere obtener imagen
+ * @param endDate Fecha final
+ * @returns  Devuelve el path de la imagen
+ */
+
 export const generateImage = async(sensor: string,table: string, endDate: Date): Promise<string> => {
     // se setea el delay de 13 horas para las graficas del espectrograma
     const startDate = timeService.addHours(endDate, -13);

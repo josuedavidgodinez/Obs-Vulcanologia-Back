@@ -17,7 +17,7 @@ export function Test(): string {
 
 /**
  * 
- * @param table Id de la estación de la cuál se va a generar mseeds
+ * @param table Id de la estación de la cuál se va a generar mseeds 
  */
 export async function GenerateMSeed(table: string) {
     var fecha_inicial = new Date()  //Se obtiene la fecha

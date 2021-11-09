@@ -6,7 +6,7 @@ import { runPy } from "./pythonService";
 import * as FileS from "./FileServiceDB"
 /**
  * Función para crear imagenes 
- * @param sensor número de sensor de la estación de la cual se va a generar la imagen
+ * @param sensor número de sensor de la estación de la cual se va a generar la imagen 
  * @param table id de la estación de la cual se va a generar imagen
  * @param endDate fecha final de la cual se va a restar la diferencia de horas
  * @returns 
