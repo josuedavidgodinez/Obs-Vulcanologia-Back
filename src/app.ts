@@ -73,72 +73,72 @@ app.get(RAIZ, (req, res) => {
 });
 
 
-// /**
-//  * Tareas automáticas con la librería cron 
-//  * Significado de cada "*" de izquiera a derecha
-//      1er * = minutos
-//      2do * = horas
-//      3er * = dia del mes
-//      4to * = mes
-//      5to * = dia de la semana
-//  */
+/**
+ * Tareas automáticas con la librería cron 
+ * Significado de cada "*" de izquiera a derecha
+     1er * = minutos
+     2do * = horas
+     3er * = dia del mes
+     4to * = mes
+     5to * = dia de la semana
+ */
      
-// //1
-// /** 
-//  * Método que ejecuta la tarea de crear un mseed de la estación ise1 cada hora en punto.
-//  * para una hora en específico basta con poner la hora en la posición correcta.
-// */
-// cron.schedule('0 */1 * * *', async function () {
-//     console.log(AutoTasks.GenerateMSeed('ise1'))
-// });
-// //2
-// /** 
-//  * Método que ejecuta la tarea de crear un mseed de la estación ise2 cada hora en punto.
-//  * para una hora en específico basta con poner la hora en la posición correcta.
-// */
-// cron.schedule('0 */1 * * *', async function () {
-//     console.log(AutoTasks.GenerateMSeed('ise2'))
-// });
-// //3
-// /** 
-//  * Método que ejecuta la tarea de crear un mseed de la estación e1ms1 cada hora en punto.
-//  * para una hora en específico basta con poner la hora en la posición correcta.
-// */
-// cron.schedule('0 */1 * * *', async function () {
-//     console.log(AutoTasks.GenerateMSeed('e1ms1'))
-// });
+//1
+/** 
+ * Método que ejecuta la tarea de crear un mseed de la estación ise1 cada hora en punto.
+ * para una hora en específico basta con poner la hora en la posición correcta.
+*/
+cron.schedule('0 */1 * * *', async function () {
+    console.log(AutoTasks.GenerateMSeed('ise1'))
+});
+//2
+/** 
+ * Método que ejecuta la tarea de crear un mseed de la estación ise2 cada hora en punto.
+ * para una hora en específico basta con poner la hora en la posición correcta.
+*/
+cron.schedule('0 */1 * * *', async function () {
+    console.log(AutoTasks.GenerateMSeed('ise2'))
+});
+//3
+/** 
+ * Método que ejecuta la tarea de crear un mseed de la estación e1ms1 cada hora en punto.
+ * para una hora en específico basta con poner la hora en la posición correcta.
+*/
+cron.schedule('0 */1 * * *', async function () {
+    console.log(AutoTasks.GenerateMSeed('e1ms1'))
+});
 
 
-// //Images Cron
-// //1
-// /** 
-//  * Método que ejecuta la tarea de crear una imagen cada 15 minutos.
-//  * para una hora en específico basta con poner la hora en la posición correcta.
-// */
-// cron.schedule('0 */15 * * * *', async function () {
-//     let date = new Date();
-//     const f_f = Time.addHours(Time.changeToUTC(date), -13); //Obtener como fecha final 13hrs atrás por un tema de delay en los archivos mseed
-//                                                             //Si necesita cambiar la hora de delay, únicamente indicar la cantidad de tiempo en hrs
+//Images Cron
+//1
+/** 
+ * Método que ejecuta la tarea de crear una imagen cada 15 minutos.
+ * para una hora en específico basta con poner la hora en la posición correcta.
+*/
+cron.schedule('0 */15 * * * *', async function () {
+    let date = new Date();
+    const f_f = Time.addHours(Time.changeToUTC(date), -13); //Obtener como fecha final 13hrs atrás por un tema de delay en los archivos mseed
+                                                            //Si necesita cambiar la hora de delay, únicamente indicar la cantidad de tiempo en hrs
 
-//     //Ejecuciones asincronas para llevar un orden en las gráficas
-//     //Misma hora para los 3
-//     await H24_e1ms1(f_f);
-//     await H24_ise1(f_f);
-//     await H24_ise2(f_f);
-// });
+    //Ejecuciones asincronas para llevar un orden en las gráficas
+    //Misma hora para los 3
+    await H24_e1ms1(f_f);
+    await H24_ise1(f_f);
+    await H24_ise2(f_f);
+});
 
-// cron.schedule('0 */10 * * * *', async function () {
-//     let date = new Date();
-//     const f_f = Time.addHours(Time.changeToUTC(date), -13); //Obtener como fecha final 13hrs atrás por un tema de delay en los archivos mseed
-//     //Si necesita cambiar la hora de delay, únicamente indicar la cantidad de tiempo en hrs
+cron.schedule('0 */10 * * * *', async function () {
+    let date = new Date();
+    const f_f = Time.addHours(Time.changeToUTC(date), -13); //Obtener como fecha final 13hrs atrás por un tema de delay en los archivos mseed
+    //Si necesita cambiar la hora de delay, únicamente indicar la cantidad de tiempo en hrs
 
-//     //Ejecuciones asincronas para llevar un orden en las gráficas
-//     //Misma hora para los 3
+    //Ejecuciones asincronas para llevar un orden en las gráficas
+    //Misma hora para los 3
 
-//     await SP_e1ms1(f_f);
-//     await SP_ise1(f_f);
-//     await SP_ise2(f_f);
-// });
+    await SP_e1ms1(f_f);
+    await SP_ise1(f_f);
+    await SP_ise2(f_f);
+});
 
 /**
  * Método para generar imagenes de e1ms1 4 sensores
