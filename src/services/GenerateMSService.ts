@@ -65,6 +65,9 @@ export const genMiniseeds= async (tabla: string, fechaInicio: Date, fechaFin: Da
             if (i != registers.length - 2) sqlText += ',';
         }
     }
+    if(sqlText.substring(sqlText.length - 1) == ','){
+        sqlText = sqlText.substring(0, sqlText.length - 1);
+    }
     console.log(sqlText)
     const query_result = await pool.query(sqlText);
     console.log(query_result)
