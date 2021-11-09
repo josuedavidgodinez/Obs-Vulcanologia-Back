@@ -40,6 +40,6 @@ matplotlib.use('Agg')
 #Realizamos un plot de Espectrograma a partir de los datos de los mini seed
 title_es = "Espectrograma - Fecha I.: "+ StartDate + " Fecha F.: "+EndDate+" \n Sensor: "+Sensor+" Estacion: "+Estacion
 st.spectrogram(log=True, title=title_es, outfile=imgPath)
-#Imprimimos la ruta de la imagen en consolapara ser leida por node
+#Imprimimos la ruta de la imagen en consola para ser leida por node
 print(imgPath)
 os.remove(filePath)
