@@ -50,17 +50,20 @@ export const genMiniseeds= async (tabla: string, fechaInicio: Date, fechaFin: Da
     let sqlText: string = 'INSERT INTO ' + listaTablas['seeds'];
     sqlText += '(ruta_completa, fecha_inicial, fecha_final, alias, estacion, sensor,archivo_txt,fecha_hora_registro) VALUES ';
     for (let i = 0; i < registers.length-1; i++) {
-        sqlText += '('
         const reg = registers[i].split('\t');
-        msPaths.push(reg[0]);
-        for (let j = 0; j < reg.length; j++) {
-            const item = reg[j];
-            //const prefix = i==0?'(':',';           
-            sqlText += '\''+ item + '\'';
-            if (j != reg.length - 1) sqlText += ',';
+        const msp = reg[0];
+        const mseedExist = await io.fileExists(msp);
+        if(mseedExist){
+            msPaths.push(msp);
+            sqlText += '('
+            for (let j = 0; j < reg.length; j++) {
+                const item = reg[j];        
+                sqlText += '\''+ item + '\'';
+                if (j != reg.length - 1) sqlText += ',';
+            }
+            sqlText += ',now())'
+            if (i != registers.length - 2) sqlText += ',';
         }
-        sqlText += ',now())'
-        if (i != registers.length - 2) sqlText += ',';
     }
     console.log(sqlText)
     const query_result = await pool.query(sqlText);
