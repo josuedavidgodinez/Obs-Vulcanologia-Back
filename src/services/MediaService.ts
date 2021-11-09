@@ -12,7 +12,14 @@ const getImgRef = (row: any) => {
     const fechaFinal: string = row[columnasImagenes.fechaFinal];
     return{ imgName, fechaInicial, fechaFinal };
 }
-
+/**
+ * 
+ * @param estacion id de la estación de la que se quiere obtener imagen
+ * @param sensor número del sensor que se está consultando
+ * @param tipo Tipo de imagen (24Hrs, Espectograma)
+ * @param fechaInicio Fecha de la cual se quiere información
+ * @returns devuelve 1 ruta de la imagen última
+ */
 export const getImgPath = async (
     estacion: string,
     sensor: number,
@@ -62,11 +69,15 @@ export const getImgPathList = async (
         query += ' ORDER BY ' + columnasImagenes.fechaRegisto +' DESC LIMIT 10';
     else throw new Error("Invalid count of parameters");
     // se espera resultado de la consulta
-    const query_result = await pool.query(query);
+    const query_result = await pool.query(query);   //Consulta de las últimas 10 imagenes
     if (query_result.rows.length == 0) return [];
-    return query_result.rows.map(r => getImgRef(r));
+    return query_result.rows.map(r => getImgRef(r)); //Devuelve ruta de imagenes a mostrar
 }
-
+/**
+ * 
+ * @param imgName alias de la imagen que se quiera buscar
+ * @returns Rutas de las imagenes que coinciden con el criterio de búsqueda
+ */
 export const getImgPath2 = async (imgName: string): Promise<string> => {
     const comilla = "'";
     const wparam = comilla + "%" + imgName + comilla;
