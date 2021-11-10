@@ -6,6 +6,9 @@ import * as timeService from "../services/TimeService";
 const med: Router =  Router();
 
 // host/med/tabla?fhi=_fechaHoraInicio&fhf=_fechaHoraFin
+/**
+ * Para lectura de datos en vivo con fecha específica [fhi. fhf]
+ */
 med.get('/:tabla', function(req,  res) {
     const tabla: string = listaTablas[req.params.tabla];
     if(!tabla) {
@@ -52,6 +55,9 @@ med.get('/:tabla', function(req,  res) {
     });
 });
 
+/**
+ * Para lectura de datos en vivo con fecha actual.
+ */
 med.get('/:tabla/LecturaInicio', function(req,  res) {
     const tabla: string = listaTablas[req.params.tabla];
     if(!tabla) {

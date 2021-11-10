@@ -1,6 +1,11 @@
 import pool from "../database/db";
 import { columnasminiSeeds, columnasImagenes } from "../models/listaAtributos";
 
+/**
+ * Diferencia de hora de los archivos mini seed generados para saber si deben generarse más.
+ * @param tabla Filtra los archivos mini seed según la tabla de las estaciones.
+ * @returns 
+ */
 export async function DiferenciaHoraArchivo(tabla:string): Promise<boolean> {
     let query = 'SELECT '
     query += 'DATE_PART(\'day\',max(' + columnasminiSeeds.fechaFinal + ')::timestamp - current_date::timestamp) * 24 + '
@@ -16,6 +21,13 @@ export async function DiferenciaHoraArchivo(tabla:string): Promise<boolean> {
     return false;
 }
 
+/**
+ * Diferencia de hora de las imágenes generadas para saber si deben generarse más imágenes.
+ * @param estacion Número de estación
+ * @param sensor Nombre de sensor
+ * @param tipo Tipo de imagen 
+ * @returns 
+ */
 export async function DiferenciaHoraImagen(estacion: string, sensor: string, tipo: string): Promise<boolean> {
     let query = 'SELECT '
     query += 'DATE_PART(\'day\',max(' + columnasImagenes.fechaFinal + ')::timestamp - current_date::timestamp) * 24 + '

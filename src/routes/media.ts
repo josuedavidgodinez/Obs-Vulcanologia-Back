@@ -14,6 +14,9 @@ const badRequestObject = (message: string) => {
     };
 }
 
+/**
+ * Ruta para obtener la imagen de 24h por estación y sensor 
+ */
 // host/media/24h/estacion/sensor?fh=_fechaHora
 media.get('/24h/:estacion/:sensor', (req,  res) => {    
     const estacion: string = listaImagenes[req.params.estacion];
@@ -95,6 +98,9 @@ media.get('/eg/:estacion/:sensor', (req,  res) => {
     });
 });
 
+/**
+ * Obtiene la última foto del volcán
+ */
 media.get('/lastPhoto', (req, res) => {
     getLastPhoto().then(path => {
         res.status(statusCode.ok)
@@ -112,6 +118,9 @@ media.get('/lastPhoto', (req, res) => {
     });
 });
 
+/**
+ * Ruta para obtener imágenes del servidor (espectogramas)
+ */
 media.get('/graphs/:imgName', (req, res) => {
     const imgName: string = req.params.imgName;
     getImgPath2(imgName).then(path => {

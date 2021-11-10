@@ -14,6 +14,8 @@ from obspy import UTCDateTime, read, Trace, Stream
 import os
 import uuid
 
+# IMPORTANTE: brindar permisos al ejecutable de ascii2miniseed para que genere los archivos.
+
 # print('\n ' + datetime.now().strftime("%Y-%d-%m %H:%M:%S") + ' - inicia programa\n')
 
 # params from system
@@ -30,7 +32,7 @@ tempFolder = sys.argv[6]
 # datafolder = '/home/litedev/Downloads/obspydata3/'
 # ascii2miniseedfolder = '/home/litedev/Documents/virtualenv/ascii2mseed/ascii2mseed'
 # tempFolder = '/home/litedev/Downloads/tempFolder/'
-
+#query para obtener datos de las estaciones
 def getData():
     try:
         con = psycopg2.connect(user = "postgres",
@@ -134,6 +136,7 @@ grupoActual = Grupo()
 init = datetime.now()
 ultimaFecha = init
 
+# diferencia de tiempo entre datos para identificar gaps en las gráficas. 
 for index, r in df.iterrows():
     fechaActual = r.values[0]
     mediciones = [r[1], r[2], r[3], r[4]]
@@ -168,6 +171,7 @@ if grupoActual.cuenta > 0:
 # print('\n ' + datetime.now().strftime("%Y-%d-%m %H:%M:%S") + ' - termina agrupacion\n')
 df = 0
 
+#generación de encabezados de archivos txt y las columnas. Se agrega diferentes tabulaciones.
 estacion = tabla.split('_')[1]
 for g in grupos:
     now = datetime.now()
@@ -206,9 +210,12 @@ for g in grupos:
 
 # print('\n ' + datetime.now().strftime("%Y-%d-%m %H:%M:%S") + ' - termina archivos txt\n')
 
+# asignación de id de archivo 
 uniqueId = uuid.uuid4().hex + '_' + datetime.now().strftime("%Y%d%m%H%M%S")
 randFileName = tempFolder + uniqueId + '.txt'
 
+# IMPORTANTE: brindar permisos al ejecutable de ascii2miniseed para que genere los archivos.
+# generación de archivos miniseed
 for g in grupos:
     for i in range(4):
         os.system('sudo ' + ascii2miniseedfolder + ' ' + g.rutas_txt[i] + ' -o ' + g.rutas_ms[i])
@@ -223,6 +230,7 @@ for g in grupos:
         with open(randFileName, 'a') as tempFile:
             tempFile.write(allInfo + '\n')
 
+# se imprime nombre de archivo que será respuesta para el API
 print(randFileName)
 
 # print('\n ' + datetime.now().strftime("%Y-%d-%m %H:%M:%S") + ' - termina archivos mseed\n')
